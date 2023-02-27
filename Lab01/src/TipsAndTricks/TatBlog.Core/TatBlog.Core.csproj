@@ -6,4 +6,11 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Collections\" />
+    <Folder Include="Constants\" />
+    <Folder Include="DTO\" />
+    <Folder Include="Settings\" />
+  </ItemGroup>
+
 </Project>
