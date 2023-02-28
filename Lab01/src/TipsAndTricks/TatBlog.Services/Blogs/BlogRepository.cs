@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
 
@@ -16,6 +17,35 @@ namespace TatBlog.Services.Blogs
         public BlogRepository(BlogDbContext context)
         {
             _context = context;
+        }
+
+        /// <summary>
+        /// Lấy danh sách chuyên mục và số lượng bài viết nằm thuộc từng chuyên mục chủ đề
+        /// </summary>
+        /// <param name="showOnMenu"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task<IList<CategoryItem>> GetCategoriesAsync(bool showOnMenu = false, CancellationToken cancellationToken = default)
+        {
+            IQueryable<Category> categories = _context.Set<Category>();
+
+            if (showOnMenu)
+            {
+                categories = categories.Where(x => x.ShowOnMenu);
+            }
+
+            return await categories
+                .OrderBy(x => x.Name)
+                .Select(x => new CategoryItem()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlSlug = x.UrlSlug,
+                    Description = x.Description,
+                    ShowOnMenu = x.ShowOnMenu,
+                    PostCount = x.Posts.Count(p => p.Published)
+                })
+                .ToListAsync(cancellationToken);
         }
 
         /// <summary>
