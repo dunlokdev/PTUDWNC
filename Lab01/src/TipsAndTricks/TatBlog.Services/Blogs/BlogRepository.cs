@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
+using TatBlog.Services.Extentions;
 
 namespace TatBlog.Services.Blogs
 {
@@ -121,5 +123,29 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Post>()
                 .AnyAsync(x => x.Id != postId && x.UrlSlug == slug, cancellationToken);
         }
+
+        /// <summary>
+        /// Lấy danh sách từ khoá/thẻ và phân trang theo
+        /// các tham số pagingParams
+        /// </summary>
+        /// <param name="pagingParams"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task<IPagedList<TagItem>> GetPagedTagsAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
+        {
+            var tagQuery = _context.Set<Tag>()
+                .Select(x => new TagItem()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlSlug = x.UrlSlug,
+                    Description = x.Description,
+                    PostCount = x.Posts.Count(p => p.Published)
+                });
+
+            return await tagQuery.ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
     }
 }
