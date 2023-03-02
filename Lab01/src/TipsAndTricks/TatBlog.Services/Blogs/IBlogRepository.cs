@@ -41,5 +41,22 @@ namespace TatBlog.Services.Blogs
         // các tham số pagingParams
         Task<IPagedList<TagItem>> GetPagedTagsAsync(
             IPagingParams pagingParams, CancellationToken cancellationToken= default);
+
+        /// <summary>
+        /// Tìm một thẻ (Tag) theo tên định danh (slug)
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Tag> FindTagBySlugAsync(string slug, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Lấy danh sách tất cả các thẻ (Tag) kèm theo số bài viết chứa thẻ đó. Kết quả trả về kiểu IList<TagItem>.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IList<TagItem>> FindTagItemSlugAsync(CancellationToken cancellationToken= default);
+
+        Task<bool> DeleteTagById(int id, CancellationToken cancellationToken = default);
     }
 }
