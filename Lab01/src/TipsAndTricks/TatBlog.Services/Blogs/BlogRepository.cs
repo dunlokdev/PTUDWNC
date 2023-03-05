@@ -147,5 +147,40 @@ namespace TatBlog.Services.Blogs
             return await tagQuery.ToPagedListAsync(pagingParams, cancellationToken);
         }
 
+        public async Task<Tag> FindTagBySlugAsync(string slug, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Tag>()
+                .Where(x => x.UrlSlug == slug)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<IList<TagItem>> FindTagItemSlugAsync(CancellationToken cancellationToken = default)
+        {
+            var query = _context.Set<Tag>()
+                       .Select(x => new TagItem()
+                       {
+                           Id = x.Id,
+                           Name = x.Name,
+                           UrlSlug = x.UrlSlug,
+                           Description = x.Description,
+                           PostCount = x.Posts.Count(p => p.Published)
+                       });
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        public async Task<bool> DeleteTagById(int id, CancellationToken cancellationToken = default)
+        {
+            //var tag = await _context.Set<Tag>()
+            //    .Include(t => t.Posts)
+            //    .Where(x => x.Id == id)
+            //    .FirstOrDefaultAsync(cancellationToken);
+
+            //_context.Set<Tag>().Remove(tag); 
+            //_context.SaveChanges();
+
+
+            return await _context.Set<Tag>()
+                .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
+        }
     }
 }
