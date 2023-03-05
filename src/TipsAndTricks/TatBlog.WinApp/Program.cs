@@ -7,10 +7,8 @@ using TatBlog.Services.Blogs;
 using TatBlog.WinApp;
 
 var context = new BlogDbContext();
-IBlogRepository blogRepo = new BlogRepository(context);
-
 //var seeder = new DataSeeder(context);
-//seeder.Initialize()
+//seeder.Initialize();
 
 //var authors = context.Authors.ToList();
 //foreach (var author in authors)
@@ -73,51 +71,24 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //    Console.WriteLine("{0,-5}{1,-50}{2,20}", item.Id, item.Name, item.PostCount);
 //}
 
-// Lấy danh sách từ khoá
-//var pagingParams = new PagingParams
-//{
-//    PageNumber = 1,
-//    PageSize = 5,
-//    SortColumn = "Name",
-//    SortOrder = "DESC"
-//};
+IBlogRepository blogRepo = new BlogRepository(context);
+var pagingParams = new PagingParams
+{
+    PageNumber = 1,
+    PageSize = 5,
+    SortColumn = "Name",
+    SortOrder = "DESC"
+};
 
-//var tagsList = await blogRepo.GetPagedTagsAsync(pagingParams);
+var tagsList = await blogRepo.GetPagedTagsAsync(pagingParams);
 
-//Console.WriteLine("{0, -5}{1,-50}{2,10}", "ID", "Name", "Count");
+Console.WriteLine("{0, -5}{1,-50}{2,10}", "ID", "Name", "Count");
 
-//foreach (var item in tagsList)
-//{
-//    Console.WriteLine("{0, -5}{1,-50}{2,10}",
-//        item.Id, item.Name, item.PostCount);
-//}
-
-// Tìm một thẻ (Tag) theo tên định danh (slug)
-//string slug = "visual-studio";
-//var tag = await blogRepo.FindTagBySlugAsync(slug);
-
-//Console.WriteLine("{0, -5}{1,-20}{2,-20}", "ID", "Name", "Description");
-
-//Console.WriteLine("{0, -5}{1,-20}{2,-20}",
-//    tag.Id, tag.Name, tag.Description);
-
-//Tạo lớp DTO có tên là TagItem để chứa các thông tin về thẻ và số lượng
-//Lấy danh sách tất cả các thẻ (Tag) kèm theo số bài viết chứa thẻ đó. Kết
-//quả trả về kiểu IList<TagItem>.
-
-//var tags = await blogRepo.FindTagItemSlugAsync();
-//Console.WriteLine("{0, -5}{1,-50}{2,-20}", "ID", "Name", "Post Count");
-
-//foreach (var tag in tags)
-//{
-//    Console.WriteLine("{0, -5}{1,-50}{2,-20}",
-//        tag.Id, tag.Name, tag.PostCount);
-//}
-
-//Xóa một thẻ theo mã cho trước
-int id = 2;
-await blogRepo.DeleteTagById(id);
-
+foreach (var item in tagsList)
+{
+    Console.WriteLine("{0, -5}{1,-50}{2,10}",
+        item.Id, item.Name, item.PostCount);
+}
 
 
 
