@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TatBlog.Core", "TatBlog.Core\TatBlog.Core.csproj", "{FD999E35-C35A-4FDC-8650-A18FED1BE405}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TatBlog.Core", "TatBlog.Core\TatBlog.Core.csproj", "{FD999E35-C35A-4FDC-8650-A18FED1BE405}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TatBlog.Data", "TatBlog.Data\TatBlog.Data.csproj", "{7C3CB247-642D-4A21-A945-6625C0435C57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TatBlog.Data", "TatBlog.Data\TatBlog.Data.csproj", "{7C3CB247-642D-4A21-A945-6625C0435C57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TatBlog.Services", "TatBlog.Services\TatBlog.Services.csproj", "{99047431-5AED-461D-AA16-94F1126DFC05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TatBlog.Services", "TatBlog.Services\TatBlog.Services.csproj", "{99047431-5AED-461D-AA16-94F1126DFC05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TatBlog.WinApp", "TatBlog.WinApp\TatBlog.WinApp.csproj", "{CEF82632-340D-4EE4-BD67-8EB3786290F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TatBlog.WinApp", "TatBlog.WinApp\TatBlog.WinApp.csproj", "{CEF82632-340D-4EE4-BD67-8EB3786290F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TatBlog.WebApp", "TatBlog.WebApp\TatBlog.WebApp.csproj", "{0863368E-2DAD-41C2-949B-BF23CF499C29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{CEF82632-340D-4EE4-BD67-8EB3786290F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEF82632-340D-4EE4-BD67-8EB3786290F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEF82632-340D-4EE4-BD67-8EB3786290F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0863368E-2DAD-41C2-949B-BF23CF499C29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0863368E-2DAD-41C2-949B-BF23CF499C29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0863368E-2DAD-41C2-949B-BF23CF499C29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0863368E-2DAD-41C2-949B-BF23CF499C29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
