@@ -90,13 +90,29 @@ foreach (var item in tagsList)
         item.Id, item.Name, item.PostCount);
 }
 
+// Tìm một thẻ (Tag) theo tên định danh (slug)
+//string slug = "visual-studio";
+//var tag = await blogRepo.FindTagBySlugAsync(slug);
 
+//Console.WriteLine("{0, -5}{1,-20}{2,-20}", "ID", "Name", "Description");
 
+//Console.WriteLine("{0, -5}{1,-20}{2,-20}",
+//    tag.Id, tag.Name, tag.Description);
 
+//Tạo lớp DTO có tên là TagItem để chứa các thông tin về thẻ và số lượng
+//Lấy danh sách tất cả các thẻ (Tag) kèm theo số bài viết chứa thẻ đó. Kết
+//quả trả về kiểu IList<TagItem>.
 
+//var tags = await blogRepo.FindTagItemSlugAsync();
+//Console.WriteLine("{0, -5}{1,-50}{2,-20}", "ID", "Name", "Post Count");
 
+//foreach (var tag in tags)
+//{
+//    Console.WriteLine("{0, -5}{1,-50}{2,-20}",
+//        tag.Id, tag.Name, tag.PostCount);
+//}
 
-
-
-
+//Xóa một thẻ theo mã cho trước
+//int id = 2;
+//await blogRepo.DeleteTagById(id);
 
