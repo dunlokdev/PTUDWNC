@@ -202,5 +202,62 @@ namespace TatBlog.Services.Blogs
             _context.Entry(post).State = post.Id == 0 ? EntityState.Added : EntityState.Modified;
             return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
+
+        public async Task ChangeStatusPublishedOfPostAsync(int id, CancellationToken cancellationToken = default)
+        {
+            await _context.Set<Post>().Where(p => p.Id == id).ExecuteUpdateAsync(p => p.SetProperty(
+                x => x.Published, x => !x.Published), cancellationToken);
+        }
+
+        public async Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>()
+                .Include(a => a.Author)
+                .Include(c => c.Category)
+                .OrderBy(x => x.Id)
+                .Take(num)
+                .ToListAsync(cancellationToken);
+        }
+
+        public async Task<IList<Post>> FindPostByPostQueryAsync(PostQuery query, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>()
+                .Include(a => a.Author)
+                .Include(c => c.Category)
+                .Where(
+                    p => p.AuthorId == query.AuthorId
+                    || p.CategoryId == query.CategoryId
+                    || p.Category.UrlSlug.Equals(query.SlugCategory)
+                    || p.PostedDate.Month == query.TimeCreated.Month
+                    || p.PostedDate.Year == query.TimeCreated.Year
+                    || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)))
+                    .ToListAsync(cancellationToken);
+        }
+
+        public async Task<int> CountPostsOfPostQueryAsync(PostQuery query, CancellationToken cancellationToken = default)
+        {
+            var posts = await FindPostByPostQueryAsync(query);
+            return posts.Count();
+        }
+
+        public async Task<IPagedList<Post>> GetPagedPostByPostQueryAsync(IPagingParams pagingParams, PostQuery query, CancellationToken cancellationToken = default)
+        {
+            var posts = _context.Set<Post>()
+                .Include(a => a.Author)
+                .Include(c => c.Category)
+                .Where(
+                    p => p.AuthorId == query.AuthorId
+                    || p.CategoryId == query.CategoryId
+                    || p.Category.UrlSlug.Equals(query.SlugCategory)
+                    || p.PostedDate.Month == query.TimeCreated.Month
+                    || p.PostedDate.Year == query.TimeCreated.Year
+                    || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)));
+
+            return await posts.ToPagedListAsync(pagingParams, cancellationToken);
+
+            // NOT WORKING
+            //var posts = await FindPostByPostQueryAsync(query);
+            //return await posts.AsQueryable<Post>().ToPagedListAsync(pagingParams, cancellationToken);
+        }
     }
 }
