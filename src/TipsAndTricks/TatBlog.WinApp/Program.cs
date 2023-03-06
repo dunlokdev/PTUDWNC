@@ -231,4 +231,18 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //        post.Id, post.Title, post.ShortDescription);
 //}
 
+// Tìm tất cả bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery (kết quả trả về kiểu IList<Post>)
 
+var posts = await blogRepo.FindPostByPostQuery(new TatBlog.Core.DTO.PostQuery()
+{
+    AuthorId = 1,
+    CategoryId = 1,
+    SlugCategory = "angular",
+    TimeCreated = DateTime.Parse("2022-11-08"),
+    Tag = "ASP.NET MVC",
+});
+
+foreach (var post in posts)
+{
+    Console.WriteLine(post.Title);
+}

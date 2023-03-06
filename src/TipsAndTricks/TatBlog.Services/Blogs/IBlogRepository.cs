@@ -187,5 +187,13 @@ namespace TatBlog.Services.Blogs
         /// <returns></returns>
         Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Tìm tất cả bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery (kết quả trả về kiểu IList<Post>)
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IList<Post>> FindPostByPostQuery(PostQuery query, CancellationToken cancellationToken = default);
+
     }
 }
