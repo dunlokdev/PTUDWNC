@@ -220,6 +220,65 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //var rowChange = await blogRepo.AddOrUpdatePostAsync(newPost);
 //Console.WriteLine(rowChange ? "Update success" : "Failed, try again");
 
+// Chuyển đổi trạng thái Published của bài viết
+//await blogRepo.ChangeStatusPublishedOfPostAsync(1);
 
+// Lấy ngẫu nhiên N bài viết. N là tham số đầu vào.
+//var posts = await blogRepo.GetPostsByQualAsync(3);
+//foreach (var post in posts)
+//{
+//    Console.WriteLine("{0, -5}{1, -50}{2, -50}",
+//        post.Id, post.Title, post.ShortDescription);
+//}
 
+// Tìm tất cả bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery (kết quả trả về kiểu IList<Post>)
 
+//var query = new TatBlog.Core.DTO.PostQuery()
+//{
+//    AuthorId = 1,
+//    CategoryId = 1,
+//    SlugCategory = "angular",
+//    TimeCreated = DateTime.Parse("2022-11-08"),
+//    Tag = "ASP.NET MVC",
+//};
+
+//var posts = await blogRepo.FindPostByPostQueryAsync(query);
+//int count = 1;
+
+//foreach (var post in posts)
+//{
+//    Console.WriteLine(count++);
+//    Console.WriteLine("---------------------------------------------------\n");
+//    Console.WriteLine("Author ID: " + post.AuthorId);
+//    Console.WriteLine("Category ID: " + post.CategoryId);
+//    Console.WriteLine("Category Slug: " + post.Category.UrlSlug);
+//    Console.WriteLine("Month: " + post.PostedDate.Month);
+//    Console.WriteLine("Year: " + post.PostedDate.Year);
+//}
+
+//Console.WriteLine("\n Count: " + await blogRepo.CountPostsOfPostQueryAsync(query));
+
+// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery (kết quả trả về kiểu IPagedList<Post>)
+
+//var paringParams = new PagingParams()
+//{
+//    PageNumber = 1,
+//    PageSize = 5,
+//    SortColumn = "ViewCount",
+//    SortOrder = "DESC"
+//};
+
+//var query = new TatBlog.Core.DTO.PostQuery()
+//{
+//    AuthorId = 1,
+//    CategoryId = 1,
+//    SlugCategory = "angular",
+//    TimeCreated = DateTime.Parse("2022-11-08"),
+//    Tag = "ASP.NET MVC",
+//};
+
+//var posts = await blogRepo.GetPagedPostByPostQueryAsync(paringParams, query);
+//foreach (var post in posts)
+//{
+//    Console.WriteLine(post);
+//}

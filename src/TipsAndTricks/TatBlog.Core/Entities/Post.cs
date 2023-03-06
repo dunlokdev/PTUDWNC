@@ -25,5 +25,16 @@ namespace TatBlog.Core.Entities
         public Category Category { get; set; }
         public Author Author { get; set; }
         public IList<Tag> Tags { get; set; }
+
+        public override string ToString()
+        {
+            string line = "--------------------------------------------";
+            string id = "\nID: " + this.Id;
+            string title = "\nTilte: " + this.Title;
+            string shortDesc = "\nShort description: " + this.ShortDescription;
+            string urlSlug = "\nUrl slug: " + this.UrlSlug;
+            string viewCount = "\nView count: " + this.ViewCount;
+            return line + id + title + shortDesc + urlSlug + viewCount;
+        }
     }
 }

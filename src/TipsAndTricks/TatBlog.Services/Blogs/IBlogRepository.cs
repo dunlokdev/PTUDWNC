@@ -170,5 +170,45 @@ namespace TatBlog.Services.Blogs
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<bool> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Chuyển đổi trạng thái Published của bài viết
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task ChangeStatusPublishedOfPostAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Lấy ngẫu nhiên N bài viết. N là tham số đầu vào
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Tìm tất cả bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery (kết quả trả về kiểu IList<Post>)
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IList<Post>> FindPostByPostQueryAsync(PostQuery query, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Đếm số lượng bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<int> CountPostsOfPostQueryAsync(PostQuery query, CancellationToken cancellationToken= default);
+
+        /// <summary>
+        /// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery(kết quả trả về kiểu IPagedList<Post>)
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IPagedList<Post>> GetPagedPostByPostQueryAsync(IPagingParams pagingParams ,PostQuery query, CancellationToken cancellationToken = default);
     }
 }
