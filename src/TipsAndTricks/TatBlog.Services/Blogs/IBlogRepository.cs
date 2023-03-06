@@ -11,34 +11,66 @@ namespace TatBlog.Services.Blogs
 {
     public interface IBlogRepository
     {
-        // Tìm bài viết có tên định danh là 'slug'
-        // và được đăng vào tháng 'month' năm 'year'
-
+        /// <summary>
+        /// Tìm bài viết có tên định danh là 'slug' và được đăng vào tháng 'month' năm 'year'
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="slug"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<Post> GetPostAsync(
             int year,
             int month,
             string slug,
             CancellationToken cancellationToken = default);
 
-        // Tìm Top N bài viết phổ được nhiều người xem nhất
+        /// <summary>
+        /// Tìm Top N bài viết phổ được nhiều người xem nhất
+        /// </summary>
+        /// <param name="numPosts"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<IList<Post>> GetPopularArticleAsync(int numPosts, CancellationToken cancellationToken = default);
 
-        // Kiểm tra xem tên định danh của bài viết đã có hay chưa
+        /// <summary>
+        /// Kiểm tra xem tên định danh của bài viết đã có hay chưa
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="slug"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<bool> IsPostSlugExistedAsync(
             int postId, string slug,
             CancellationToken cancellationToken = default);
 
-        // Tăng số lượt xem của một bài viết
+        /// <summary>
+        /// Tăng số lượt xem của một bài viết
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task IncreaseViewCountAsync(
             int postId,
             CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Lấy danh sách chuyên mục và số lượng bài viết nằm thuộc từng chuyên mục chủ đề
+        /// </summary>
+        /// <param name="showOnMenu"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<IList<CategoryItem>> GetCategoriesAsync(
             bool showOnMenu = false,
             CancellationToken cancellationToken = default);
 
-        // Lấy danh sách từ khoá/thẻ và phân trang theo
-        // các tham số pagingParams
+        /// <summary>
+        /// Lấy danh sách từ khoá/thẻ và phân trang theo
+        /// các tham số pagingParams
+        /// </summary>
+        /// <param name="pagingParams"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         Task<IPagedList<TagItem>> GetPagedTagsAsync(
             IPagingParams pagingParams, CancellationToken cancellationToken = default);
 
@@ -138,9 +170,5 @@ namespace TatBlog.Services.Blogs
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<bool> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default);
-
-
-
-
     }
 }

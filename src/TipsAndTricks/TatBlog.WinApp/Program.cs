@@ -8,6 +8,8 @@ using TatBlog.Services.Blogs;
 using TatBlog.WinApp;
 
 var context = new BlogDbContext();
+IBlogRepository blogRepo = new BlogRepository(context);
+
 //var seeder = new DataSeeder(context);
 //seeder.Initialize();
 
@@ -173,7 +175,7 @@ var context = new BlogDbContext();
 //}
 
 // Lấy và phân trang danh sách chuyên mục, kết quả trả về kiểu IPagedList<CategoryItem>.
-IBlogRepository blogRepo = new BlogRepository(context);
+//IBlogRepository blogRepo = new BlogRepository(context);
 
 //var paringParams = new PagingParams()
 //{
@@ -217,7 +219,6 @@ IBlogRepository blogRepo = new BlogRepository(context);
 
 //var rowChange = await blogRepo.AddOrUpdatePostAsync(newPost);
 //Console.WriteLine(rowChange ? "Update success" : "Failed, try again");
-
 
 
 
