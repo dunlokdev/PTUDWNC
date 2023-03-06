@@ -148,6 +148,12 @@ namespace TatBlog.Services.Blogs
         }
 
 
+        /// <summary>
+        /// Tìm một thẻ (Tag) theo tên định danh (slug)
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<Tag> FindTagBySlugAsync(string slug, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Tag>()
@@ -155,6 +161,11 @@ namespace TatBlog.Services.Blogs
                 .FirstOrDefaultAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Lấy danh sách tất cả các thẻ (Tag) kèm theo số bài viết chứa thẻ đó. Kết quả trả về kiểu IList<TagItem>
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<IList<TagItem>> FindTagItemSlugAsync(CancellationToken cancellationToken = default)
         {
             var query = _context.Set<Tag>()
@@ -169,7 +180,7 @@ namespace TatBlog.Services.Blogs
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<bool> DeleteTagById(int id, CancellationToken cancellationToken = default)
+        public async Task<bool> DeleteTagByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             //var tag = await _context.Set<Tag>()
             //    .Include(t => t.Posts)
@@ -182,6 +193,67 @@ namespace TatBlog.Services.Blogs
 
             return await _context.Set<Tag>()
                 .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
+        }
+
+        public async Task<Category> FindCategoryBySlugAsync(string slug, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Category>()
+                    .FirstOrDefaultAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
+        }
+
+        public async Task<Category> FindCategoryByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Category>()
+                .FindAsync(id, cancellationToken);
+        }
+
+        public async Task<bool> AddOrEditCategoryAsync(Category newCategory, CancellationToken cancellationToken = default)
+        {
+            _context.Entry(newCategory).State = newCategory.Id == 0 ? EntityState.Added : EntityState.Modified;
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
+        }
+
+        public async Task<bool> DeleteCategoryByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Category>()
+                .Where(c => c.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
+        }
+
+        public async Task<bool> IsSlugOfCategoryExist(string slug, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Category>().AnyAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
+        }
+
+        public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
+        {
+            var categoriesQuery = _context.Set<Category>()
+                .Select(x => new CategoryItem()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlSlug = x.UrlSlug,
+                    Description = x.Description,
+                    ShowOnMenu = x.ShowOnMenu,
+                    PostCount = x.Posts.Count(p => p.Published)
+                });
+
+            return await categoriesQuery.ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
+        public Task<object> CountByMostRecentMonthAsync(int month, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Post> FindPostByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>().FindAsync(id, cancellationToken);
+        }
+
+        public async Task<bool> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default)
+        {
+            _context.Entry(post).State = post.Id == 0 ? EntityState.Added : EntityState.Modified;
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

@@ -63,6 +63,84 @@ namespace TatBlog.Services.Blogs
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> DeleteTagById(int id, CancellationToken cancellationToken = default);
+        Task<bool> DeleteTagByIdAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Tìm một chuyên mục (Category) theo tên định danh (slug).
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Category> FindCategoryBySlugAsync(string slug, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Tìm một chuyên mục theo mã số cho trước
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Category> FindCategoryByIdAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Thêm hoặc cập nhật một chuyên mục/chủ đề.
+        /// </summary>
+        /// <param name="newCategory"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> AddOrEditCategoryAsync(Category newCategory, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Xóa một chuyên mục theo mã số cho trước
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> DeleteCategoryByIdAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
+        /// </summary>
+        /// <param name="slug"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> IsSlugOfCategoryExist(string slug, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Lấy và phân trang danh sách chuyên mục, kết quả trả về kiểu IPagedList<CategoryItem>
+        /// </summary>
+        /// <param name="pagingParams"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Đếm số lượng bài viết trong N tháng gần nhất. N là tham số đầu vào. Kết
+        /// quả là một danh sách các đối tượng chứa các thông tin sau: Năm, Tháng, Số
+        /// bài viết
+        /// </summary>
+        /// <param name="month"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Object> CountByMostRecentMonthAsync(int month, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Tìm một bài viết theo mã số
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Post> FindPostByIdAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Thêm hay cập nhật một bài viết
+        /// </summary>
+        /// <param name="post"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default);
+
+
+
+
     }
 }
