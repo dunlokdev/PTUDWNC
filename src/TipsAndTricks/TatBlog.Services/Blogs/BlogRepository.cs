@@ -219,7 +219,7 @@ namespace TatBlog.Services.Blogs
                 .ToListAsync(cancellationToken);
         }
 
-        public async Task<IList<Post>> FindPostByPostQuery(PostQuery query, CancellationToken cancellationToken = default)
+        public async Task<IList<Post>> FindPostByPostQueryAsync(PostQuery query, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Post>()
                 .Include(a => a.Author)
@@ -234,13 +234,13 @@ namespace TatBlog.Services.Blogs
                     .ToListAsync(cancellationToken);
         }
 
-        public async Task<int> CountPostsOfPostQuery(PostQuery query, CancellationToken cancellationToken = default)
+        public async Task<int> CountPostsOfPostQueryAsync(PostQuery query, CancellationToken cancellationToken = default)
         {
-            var posts = await FindPostByPostQuery(query);
+            var posts = await FindPostByPostQueryAsync(query);
             return posts.Count();
         }
 
-        public async Task<IPagedList<Post>> GetPagedPostByPostQuery(IPagingParams pagingParams, PostQuery query, CancellationToken cancellationToken = default)
+        public async Task<IPagedList<Post>> GetPagedPostByPostQueryAsync(IPagingParams pagingParams, PostQuery query, CancellationToken cancellationToken = default)
         {
             var posts = _context.Set<Post>()
                 .Include(a => a.Author)
@@ -256,7 +256,7 @@ namespace TatBlog.Services.Blogs
             return await posts.ToPagedListAsync(pagingParams, cancellationToken);
 
             // NOT WORKING
-            //var posts = await FindPostByPostQuery(query);
+            //var posts = await FindPostByPostQueryAsync(query);
             //return await posts.AsQueryable<Post>().ToPagedListAsync(pagingParams, cancellationToken);
         }
     }

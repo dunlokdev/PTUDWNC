@@ -193,7 +193,7 @@ namespace TatBlog.Services.Blogs
         /// <param name="query"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IList<Post>> FindPostByPostQuery(PostQuery query, CancellationToken cancellationToken = default);
+        Task<IList<Post>> FindPostByPostQueryAsync(PostQuery query, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Đếm số lượng bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery
@@ -201,7 +201,7 @@ namespace TatBlog.Services.Blogs
         /// <param name="query"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<int> CountPostsOfPostQuery(PostQuery query, CancellationToken cancellationToken= default);
+        Task<int> CountPostsOfPostQueryAsync(PostQuery query, CancellationToken cancellationToken= default);
 
         /// <summary>
         /// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery(kết quả trả về kiểu IPagedList<Post>)
@@ -209,6 +209,6 @@ namespace TatBlog.Services.Blogs
         /// <param name=""></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IPagedList<Post>> GetPagedPostByPostQuery(IPagingParams pagingParams ,PostQuery query, CancellationToken cancellationToken = default);
+        Task<IPagedList<Post>> GetPagedPostByPostQueryAsync(IPagingParams pagingParams ,PostQuery query, CancellationToken cancellationToken = default);
     }
 }
