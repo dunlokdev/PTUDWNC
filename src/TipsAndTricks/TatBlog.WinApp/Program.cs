@@ -220,6 +220,15 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //var rowChange = await blogRepo.AddOrUpdatePostAsync(newPost);
 //Console.WriteLine(rowChange ? "Update success" : "Failed, try again");
 
+// Chuyển đổi trạng thái Published của bài viết
+//await blogRepo.ChangeStatusPublishedOfPostAsync(1);
 
+// Lấy ngẫu nhiên N bài viết. N là tham số đầu vào.
+//var posts = await blogRepo.GetPostsByQualAsync(3);
+//foreach (var post in posts)
+//{
+//    Console.WriteLine("{0, -5}{1, -50}{2, -50}",
+//        post.Id, post.Title, post.ShortDescription);
+//}
 
 

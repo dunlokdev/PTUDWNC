@@ -202,5 +202,21 @@ namespace TatBlog.Services.Blogs
             _context.Entry(post).State = post.Id == 0 ? EntityState.Added : EntityState.Modified;
             return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
+
+        public async Task ChangeStatusPublishedOfPostAsync(int id, CancellationToken cancellationToken = default)
+        {
+            await _context.Set<Post>().Where(p => p.Id == id).ExecuteUpdateAsync(p => p.SetProperty(
+                x => x.Published, x => !x.Published), cancellationToken);
+        }
+
+        public async Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>()
+                .Include(a => a.Author)
+                .Include(c => c.Category)
+                .OrderBy(x => x.Id)
+                .Take(num)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

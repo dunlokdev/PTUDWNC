@@ -170,5 +170,22 @@ namespace TatBlog.Services.Blogs
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<bool> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Chuyển đổi trạng thái Published của bài viết
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task ChangeStatusPublishedOfPostAsync(int id, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Lấy ngẫu nhiên N bài viết. N là tham số đầu vào
+        /// </summary>
+        /// <param name="num"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default);
+
     }
 }
