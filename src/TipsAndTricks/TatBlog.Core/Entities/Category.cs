@@ -15,5 +15,15 @@ namespace TatBlog.Core.Entities
         public string Description { get; set; }
         public bool ShowOnMenu { get; set; }
         public IList<Post> Posts { get; set; }
+
+        public override string ToString()
+        {
+            string line = "\n--------------------------------------------------";
+            string name = "\nName: " + this.Name;
+            string url = "\nUrl slug: " + this.UrlSlug;
+            string desc = "\nDescription: " + this.Description;
+
+            return line + name + url + desc;
+        }
     }
 }

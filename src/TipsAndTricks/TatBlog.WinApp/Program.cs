@@ -244,5 +244,5 @@ var posts = await blogRepo.FindPostByPostQuery(new TatBlog.Core.DTO.PostQuery()
 
 foreach (var post in posts)
 {
-    Console.WriteLine(post.Title);
+    Console.WriteLine(post);
 }
