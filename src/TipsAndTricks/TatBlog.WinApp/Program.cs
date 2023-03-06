@@ -1,12 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 using System.Collections.Immutable;
+using TatBlog.Core.Entities;
 using TatBlog.Data.Contexts;
 using TatBlog.Data.Seeders;
 using TatBlog.Services.Blogs;
 using TatBlog.WinApp;
 
 var context = new BlogDbContext();
+IBlogRepository blogRepo = new BlogRepository(context);
+
 //var seeder = new DataSeeder(context);
 //seeder.Initialize();
 
@@ -115,4 +118,108 @@ var context = new BlogDbContext();
 //Xóa một thẻ theo mã cho trước
 //int id = 2;
 //await blogRepo.DeleteTagById(id);
+
+// Xóa một thẻ theo mã cho trước.
+//var slug = "net-core";
+//IBlogRepository blogRepo = new BlogRepository(context);
+//var category = await blogRepo.FindCategoryBySlugAsync(slug);
+//Console.WriteLine("{0, -5}{1,-20}{2,-20}", category.Id, category.Name, category.Description);
+
+// Tìm một chuyên mục (Category) theo tên định danh (slug)
+//IBlogRepository blogRepo = new BlogRepository(context);
+//var item = await blogRepo.FindCategoryBySlugAsync("design-patterns");
+//Console.WriteLine("{0,-5}{1,-50}{2,-50}", "ID", "Name", "Description");
+//Console.WriteLine("{0,-5}{1,-50}{2,-50}", item.Id, item.Name, item.Description);
+
+// Tìm một chuyên mục theo mã số cho trước
+//IBlogRepository blogRepo = new BlogRepository(context);
+//var item = await blogRepo.FindCategoryByIdAsync(2);
+//Console.WriteLine("{0,-5}{1,-50}{2,-50}", "ID", "Name", "Description");
+//Console.WriteLine("{0,-5}{1,-50}{2,-50}", item.Id, item.Name, item.Description);
+
+// Thêm hoặc cập nhật một chuyên mục/chủ đề
+//var newPost = new Category()
+//{
+//    Name = "Cloud",
+//    Description = "Explore and assess Google Cloud with free usage of over 20 products, plus new customers get $300 in free credits on signup.",
+//    UrlSlug = "cloud",
+//};
+
+//IBlogRepository blogRepo = new BlogRepository(context);
+//var rowChange = await blogRepo.AddOrEditCategoryAsync(newPost);
+//Console.WriteLine(rowChange ? "Update success" : "Failed, try again");
+
+// Xóa một chuyên mục theo mã số cho trước.
+//IBlogRepository blogRepo = new BlogRepository(context);
+//var isSuccess = await blogRepo.DeleteCategoryByIdAsync(1002);
+//Console.WriteLine(isSuccess ? "Delete success" : "Failed, try again");
+
+// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
+//IBlogRepository blogRepo = new BlogRepository(context);
+//if (await blogRepo.IsSlugOfCategoryExist("net-core"))
+//{
+//    Console.WriteLine("Exist");
+//} else
+//{
+//    Console.WriteLine("No Exist");
+//}
+
+//IBlogRepository blogRepo = new BlogRepository(context);
+//if (await blogRepo.IsSlugOfCategoryExist("not-exist"))
+//{
+//    Console.WriteLine("Exist");
+//}
+//else
+//{
+//    Console.WriteLine("No Exist");
+//}
+
+// Lấy và phân trang danh sách chuyên mục, kết quả trả về kiểu IPagedList<CategoryItem>.
+//IBlogRepository blogRepo = new BlogRepository(context);
+
+//var paringParams = new PagingParams()
+//{
+//    PageNumber = 1,
+//    PageSize = 5,
+//    SortColumn = "PostCount",
+//    SortOrder = "DESC"
+//};
+
+//var categoriesPage = await blogRepo.GetPagedCategoriesAsync(paringParams);
+//Console.WriteLine("{0, -10}{1, -50}{2, 10}","ID", "Name", "Count");
+
+//foreach (var category in categoriesPage)
+//{
+//    Console.WriteLine("{0, -10}{1, -50}{2, 10}",
+//        category.Id, category.Name, category.PostCount);
+//}
+
+// Tìm một bài viết theo mã sốA
+//var post = await blogRepo.FindPostByIdAsync(9);
+//Console.WriteLine("{0, -10}{1, -50}{2, -50}",
+//    post.Id, post.Title, post.ShortDescription);
+
+//Thêm hoặc cập nhật một post 
+//var newPost = new Post()
+//{
+//    Id = 1,
+//    Title = "His mother had always taught him",
+//    ShortDescription = "His mother had always taught him not to ever think of himself as better than others save changed.",
+//    Description = "His mother had always taught him not to ever think of himself as better than others. He'd tried to live by this motto. He never looked down on those who were less fortunate or who had less money than him. But the stupidity of the group of people he was talking to made him change his mind.",
+//    Meta = "post-01",
+//    UrlSlug = "his-mother-had-always-taught-him",
+//    Published = true,
+//    PostedDate = new DateTime(2023, 2, 22, 1, 20, 0),
+//    ModifiedDate = null,
+//    ViewCount = 2,
+//    AuthorId = 1,
+//    CategoryId = 1,
+//};
+
+
+//var rowChange = await blogRepo.AddOrUpdatePostAsync(newPost);
+//Console.WriteLine(rowChange ? "Update success" : "Failed, try again");
+
+
+
 
