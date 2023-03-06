@@ -258,3 +258,25 @@ IBlogRepository blogRepo = new BlogRepository(context);
 
 //Console.WriteLine("\n Count: " + await blogRepo.CountPostsOfPostQuery(query));
 
+var paringParams = new PagingParams()
+{
+    PageNumber = 1,
+    PageSize = 5,
+    SortColumn = "ViewCount",
+    SortOrder = "DESC"
+};
+
+var query = new TatBlog.Core.DTO.PostQuery()
+{
+    AuthorId = 1,
+    CategoryId = 1,
+    SlugCategory = "angular",
+    TimeCreated = DateTime.Parse("2022-11-08"),
+    Tag = "ASP.NET MVC",
+};
+
+var posts = await blogRepo.GetPagedPostByPostQuery(paringParams, query);
+foreach (var post in posts)
+{
+    Console.WriteLine(post);
+}

@@ -224,7 +224,7 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Post>()
                 .Include(a => a.Author)
                 .Include(c => c.Category)
-                .Where (
+                .Where(
                     p => p.AuthorId == query.AuthorId
                     || p.CategoryId == query.CategoryId
                     || p.Category.UrlSlug.Equals(query.SlugCategory)
@@ -238,6 +238,26 @@ namespace TatBlog.Services.Blogs
         {
             var posts = await FindPostByPostQuery(query);
             return posts.Count();
+        }
+
+        public async Task<IPagedList<Post>> GetPagedPostByPostQuery(IPagingParams pagingParams, PostQuery query, CancellationToken cancellationToken = default)
+        {
+            var posts = _context.Set<Post>()
+                .Include(a => a.Author)
+                .Include(c => c.Category)
+                .Where(
+                    p => p.AuthorId == query.AuthorId
+                    || p.CategoryId == query.CategoryId
+                    || p.Category.UrlSlug.Equals(query.SlugCategory)
+                    || p.PostedDate.Month == query.TimeCreated.Month
+                    || p.PostedDate.Year == query.TimeCreated.Year
+                    || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)));
+
+            return await posts.ToPagedListAsync(pagingParams, cancellationToken);
+
+            // NOT WORKING
+            //var posts = await FindPostByPostQuery(query);
+            //return await posts.AsQueryable<Post>().ToPagedListAsync(pagingParams, cancellationToken);
         }
     }
 }
