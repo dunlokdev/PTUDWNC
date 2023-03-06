@@ -233,16 +233,28 @@ IBlogRepository blogRepo = new BlogRepository(context);
 
 // Tìm tất cả bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery (kết quả trả về kiểu IList<Post>)
 
-var posts = await blogRepo.FindPostByPostQuery(new TatBlog.Core.DTO.PostQuery()
-{
-    AuthorId = 1,
-    CategoryId = 1,
-    SlugCategory = "angular",
-    TimeCreated = DateTime.Parse("2022-11-08"),
-    Tag = "ASP.NET MVC",
-});
+//var query = new TatBlog.Core.DTO.PostQuery()
+//{
+//    AuthorId = 1,
+//    CategoryId = 1,
+//    SlugCategory = "angular",
+//    TimeCreated = DateTime.Parse("2022-11-08"),
+//    Tag = "ASP.NET MVC",
+//};
 
-foreach (var post in posts)
-{
-    Console.WriteLine(post);
-}
+//var posts = await blogRepo.FindPostByPostQuery(query);
+//int count = 1;
+
+//foreach (var post in posts)
+//{
+//    Console.WriteLine(count++);
+//    Console.WriteLine("---------------------------------------------------\n");
+//    Console.WriteLine("Author ID: " + post.AuthorId);
+//    Console.WriteLine("Category ID: " + post.CategoryId);
+//    Console.WriteLine("Category Slug: " + post.Category.UrlSlug);
+//    Console.WriteLine("Month: " + post.PostedDate.Month);
+//    Console.WriteLine("Year: " + post.PostedDate.Year);
+//}
+
+//Console.WriteLine("\n Count: " + await blogRepo.CountPostsOfPostQuery(query));
+

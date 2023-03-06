@@ -233,5 +233,11 @@ namespace TatBlog.Services.Blogs
                     || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)))
                     .ToListAsync(cancellationToken);
         }
+
+        public async Task<int> CountPostsOfPostQuery(PostQuery query, CancellationToken cancellationToken = default)
+        {
+            var posts = await FindPostByPostQuery(query);
+            return posts.Count();
+        }
     }
 }

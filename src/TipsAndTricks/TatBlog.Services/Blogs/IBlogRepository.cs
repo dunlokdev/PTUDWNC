@@ -195,5 +195,12 @@ namespace TatBlog.Services.Blogs
         /// <returns></returns>
         Task<IList<Post>> FindPostByPostQuery(PostQuery query, CancellationToken cancellationToken = default);
 
+        /// <summary>
+        /// Đếm số lượng bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<int> CountPostsOfPostQuery(PostQuery query, CancellationToken cancellationToken= default);
     }
 }
