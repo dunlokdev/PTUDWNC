@@ -9,5 +9,9 @@ namespace TatBlog.WebApp.Controllers
             ViewBag.CurrentTime = DateTime.Now.ToString("HH:mm:ss");
             return View();
         }
+
+        public IActionResult About() => View();
+        public IActionResult Contact() => View();
+        public IActionResult Rss() => Content("Nội dung sẽ được cập nhật");
     }
 }
