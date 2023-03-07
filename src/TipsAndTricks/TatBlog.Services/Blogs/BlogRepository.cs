@@ -224,12 +224,13 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Post>()
                 .Include(a => a.Author)
                 .Include(c => c.Category)
+                .Include(t => t.Tags)
                 .Where(
                     p => p.AuthorId == query.AuthorId
                     || p.CategoryId == query.CategoryId
                     || p.Category.UrlSlug.Equals(query.SlugCategory)
-                    || p.PostedDate.Month == query.TimeCreated.Month
-                    || p.PostedDate.Year == query.TimeCreated.Year
+                    || p.PostedDate.Month == query.Month
+                    || p.PostedDate.Year == query.Year
                     || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)))
                     .ToListAsync(cancellationToken);
         }
@@ -245,12 +246,13 @@ namespace TatBlog.Services.Blogs
             var posts = _context.Set<Post>()
                 .Include(a => a.Author)
                 .Include(c => c.Category)
+                .Include(t => t.Tags)
                 .Where(
-                    p => p.AuthorId == query.AuthorId
+                    p => p.Published == query.PublishedOnly && p.AuthorId == query.AuthorId
                     || p.CategoryId == query.CategoryId
                     || p.Category.UrlSlug.Equals(query.SlugCategory)
-                    || p.PostedDate.Month == query.TimeCreated.Month
-                    || p.PostedDate.Year == query.TimeCreated.Year
+                    || p.PostedDate.Month == query.Month
+                    || p.PostedDate.Year == query.Year
                     || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)));
 
             return await posts.ToPagedListAsync(pagingParams, cancellationToken);
@@ -258,6 +260,87 @@ namespace TatBlog.Services.Blogs
             // NOT WORKING
             //var posts = await FindPostByPostQueryAsync(query);
             //return await posts.AsQueryable<Post>().ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
+        private IQueryable<Post> FilterPosts(PostQuery condition)
+        {
+            IQueryable<Post> posts = _context.Set<Post>()
+                .Include(x => x.Category)
+                .Include(x => x.Author)
+                .Include(x => x.Tags);
+
+            if (condition.PublishedOnly)
+            {
+                posts = posts.Where(x => x.Published);
+            }
+
+            //if (condition.NotPublished)
+            //{
+            //    posts = posts.Where(x => !x.Published);
+            //}
+
+            if (condition.CategoryId > 0)
+            {
+                posts = posts.Where(x => x.CategoryId == condition.CategoryId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(condition.SlugCategory))
+            {
+                posts = posts.Where(x => x.Category.UrlSlug == condition.SlugCategory);
+            }
+
+            if (condition.AuthorId > 0)
+            {
+                posts = posts.Where(x => x.AuthorId == condition.AuthorId);
+            }
+
+            //if (!string.IsNullOrWhiteSpace(condition.AuthorSlug))
+            //{
+            //    posts = posts.Where(x => x.Author.UrlSlug == condition.AuthorSlug);
+            //}
+
+            if (!string.IsNullOrWhiteSpace(condition.Tag))
+            {
+                posts = posts.Where(x => x.Tags.Any(t => t.UrlSlug == condition.Tag));
+            }
+
+            if (!string.IsNullOrWhiteSpace(condition.KeyWord))
+            {
+                posts = posts.Where(x => x.Title.Contains(condition.KeyWord) ||
+                                         x.ShortDescription.Contains(condition.KeyWord) ||
+                                         x.Description.Contains(condition.KeyWord) ||
+                                         x.Category.Name.Contains(condition.KeyWord) ||
+                                         x.Tags.Any(t => t.Name.Contains(condition.KeyWord)));
+            }
+
+            if (condition.Year > 0)
+            {
+                posts = posts.Where(x => x.PostedDate.Year == condition.Year);
+            }
+
+            if (condition.Month > 0)
+            {
+                posts = posts.Where(x => x.PostedDate.Month == condition.Month);
+            }
+
+            if (!string.IsNullOrWhiteSpace(condition.TitleSlug))
+            {
+                posts = posts.Where(x => x.UrlSlug == condition.TitleSlug);
+            }
+
+            return posts;
+        }
+
+        public async Task<IPagedList<Post>> GetPagedPostsAsync(
+        PostQuery condition,
+        int pageNumber = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default)
+        {
+            return await FilterPosts(condition).ToPagedListAsync(
+                pageNumber, pageSize,
+                nameof(Post.PostedDate), "DESC",
+                cancellationToken);
         }
     }
 }

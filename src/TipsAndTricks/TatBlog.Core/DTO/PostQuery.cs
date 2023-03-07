@@ -11,7 +11,13 @@ namespace TatBlog.Core.DTO
         public int AuthorId { get; set; }
         public int CategoryId { get; set; }
         public string SlugCategory { get; set; }
-        public DateTime TimeCreated  { get; set; }
+        public string TitleSlug { get; set; }
+        public string AuthorSlug { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+        public bool PublishedOnly { get; set; }
+        public bool NotPublished { get; set; }
         public string Tag { get; set; }
+        public string KeyWord { get; set; }
     }
 }

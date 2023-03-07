@@ -7,8 +7,8 @@ using TatBlog.Data.Seeders;
 using TatBlog.Services.Blogs;
 using TatBlog.WinApp;
 
-var context = new BlogDbContext();
-IBlogRepository blogRepo = new BlogRepository(context);
+//var context = new BlogDbContext();
+//IBlogRepository blogRepo = new BlogRepository(context);
 
 //var seeder = new DataSeeder(context);
 //seeder.Initialize();
