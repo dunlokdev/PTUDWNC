@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
         );
 
     builder.Services.AddScoped<IBlogRepository, BlogRepository>();
-    builder.Services.AddScoped<IDataSeeder, IDataSeeder>();
+    builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 }
 
 var app = builder.Build();
