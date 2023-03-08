@@ -237,7 +237,7 @@ using TatBlog.WinApp;
 //{
 //    AuthorId = 1,
 //    CategoryId = 1,
-//    SlugCategory = "angular",
+//    CategorySlug = "angular",
 //    TimeCreated = DateTime.Parse("2022-11-08"),
 //    Tag = "ASP.NET MVC",
 //};
@@ -272,7 +272,7 @@ using TatBlog.WinApp;
 //{
 //    AuthorId = 1,
 //    CategoryId = 1,
-//    SlugCategory = "angular",
+//    CategorySlug = "angular",
 //    TimeCreated = DateTime.Parse("2022-11-08"),
 //    Tag = "ASP.NET MVC",
 //};

@@ -228,7 +228,7 @@ namespace TatBlog.Services.Blogs
                 .Where(
                     p => p.AuthorId == query.AuthorId
                     || p.CategoryId == query.CategoryId
-                    || p.Category.UrlSlug.Equals(query.SlugCategory)
+                    || p.Category.UrlSlug.Equals(query.CategorySlug)
                     || p.PostedDate.Month == query.Month
                     || p.PostedDate.Year == query.Year
                     || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)))
@@ -250,7 +250,7 @@ namespace TatBlog.Services.Blogs
                 .Where(
                     p => p.Published == query.PublishedOnly && p.AuthorId == query.AuthorId
                     || p.CategoryId == query.CategoryId
-                    || p.Category.UrlSlug.Equals(query.SlugCategory)
+                    || p.Category.UrlSlug.Equals(query.CategorySlug)
                     || p.PostedDate.Month == query.Month
                     || p.PostedDate.Year == query.Year
                     || p.Tags.Any(tagName => tagName.Name.Equals(query.Tag)));
@@ -284,9 +284,9 @@ namespace TatBlog.Services.Blogs
                 posts = posts.Where(x => x.CategoryId == condition.CategoryId);
             }
 
-            if (!string.IsNullOrWhiteSpace(condition.SlugCategory))
+            if (!string.IsNullOrWhiteSpace(condition.CategorySlug))
             {
-                posts = posts.Where(x => x.Category.UrlSlug == condition.SlugCategory);
+                posts = posts.Where(x => x.Category.UrlSlug == condition.CategorySlug);
             }
 
             if (condition.AuthorId > 0)
@@ -297,6 +297,11 @@ namespace TatBlog.Services.Blogs
             if (!string.IsNullOrWhiteSpace(condition.AuthorSlug))
             {
                 posts = posts.Where(x => x.Author.UrlSlug == condition.AuthorSlug);
+            }
+
+            if (!string.IsNullOrWhiteSpace(condition.TagSlug))
+            {
+                posts = posts.Where(x => x.Tags.Any(t => t.UrlSlug == condition.TagSlug));
             }
 
             if (!string.IsNullOrWhiteSpace(condition.Tag))
