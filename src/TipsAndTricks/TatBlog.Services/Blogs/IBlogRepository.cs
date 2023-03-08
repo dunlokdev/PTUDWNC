@@ -201,7 +201,7 @@ namespace TatBlog.Services.Blogs
         /// <param name="query"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<int> CountPostsOfPostQueryAsync(PostQuery query, CancellationToken cancellationToken= default);
+        Task<int> CountPostsOfPostQueryAsync(PostQuery query, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Tìm và phân trang các bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery(kết quả trả về kiểu IPagedList<Post>)
@@ -209,6 +209,15 @@ namespace TatBlog.Services.Blogs
         /// <param name=""></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IPagedList<Post>> GetPagedPostByPostQueryAsync(IPagingParams pagingParams ,PostQuery query, CancellationToken cancellationToken = default);
+        Task<IPagedList<Post>> GetPagedPostByPostQueryAsync(IPagingParams pagingParams, PostQuery query, CancellationToken cancellationToken = default);
+
+
+        // Version of teacher
+        Task<IPagedList<Post>> GetPagedPostsAsync(
+        PostQuery condition,
+        int pageNumber = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default);
+
     }
 }

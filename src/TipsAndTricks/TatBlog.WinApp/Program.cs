@@ -7,8 +7,8 @@ using TatBlog.Data.Seeders;
 using TatBlog.Services.Blogs;
 using TatBlog.WinApp;
 
-var context = new BlogDbContext();
-IBlogRepository blogRepo = new BlogRepository(context);
+//var context = new BlogDbContext();
+//IBlogRepository blogRepo = new BlogRepository(context);
 
 //var seeder = new DataSeeder(context);
 //seeder.Initialize();
@@ -237,7 +237,7 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //{
 //    AuthorId = 1,
 //    CategoryId = 1,
-//    SlugCategory = "angular",
+//    CategorySlug = "angular",
 //    TimeCreated = DateTime.Parse("2022-11-08"),
 //    Tag = "ASP.NET MVC",
 //};
@@ -272,7 +272,7 @@ IBlogRepository blogRepo = new BlogRepository(context);
 //{
 //    AuthorId = 1,
 //    CategoryId = 1,
-//    SlugCategory = "angular",
+//    CategorySlug = "angular",
 //    TimeCreated = DateTime.Parse("2022-11-08"),
 //    Tag = "ASP.NET MVC",
 //};
