@@ -274,10 +274,10 @@ namespace TatBlog.Services.Blogs
                 posts = posts.Where(x => x.Published);
             }
 
-            //if (condition.NotPublished)
-            //{
-            //    posts = posts.Where(x => !x.Published);
-            //}
+            if (condition.NotPublished)
+            {
+                posts = posts.Where(x => !x.Published);
+            }
 
             if (condition.CategoryId > 0)
             {
@@ -294,10 +294,10 @@ namespace TatBlog.Services.Blogs
                 posts = posts.Where(x => x.AuthorId == condition.AuthorId);
             }
 
-            //if (!string.IsNullOrWhiteSpace(condition.AuthorSlug))
-            //{
-            //    posts = posts.Where(x => x.Author.UrlSlug == condition.AuthorSlug);
-            //}
+            if (!string.IsNullOrWhiteSpace(condition.AuthorSlug))
+            {
+                posts = posts.Where(x => x.Author.UrlSlug == condition.AuthorSlug);
+            }
 
             if (!string.IsNullOrWhiteSpace(condition.Tag))
             {
