@@ -1,6 +1,6 @@
 ﻿@model IPagedList<Post>
 @{
-    ViewData["Title"] = "Trang chủ";
+    ViewData["PageTitle"] = "Trang chủ";
 
     var postQuery = (ViewBag.PostQuery as PostQuery) ?? new PostQuery();
 }
