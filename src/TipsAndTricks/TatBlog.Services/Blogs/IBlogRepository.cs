@@ -219,5 +219,8 @@ namespace TatBlog.Services.Blogs
         int pageSize = 10,
         CancellationToken cancellationToken = default);
 
+        Task<Author> FindAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default);
+
+
     }
 }

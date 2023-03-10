@@ -1,2 +1,12 @@
 ﻿body {
 }
+
+a {
+    text-decoration: none;
+}
+
+.post-title {
+    color: #000;
+    font-size: 18px;
+    font-weight: bold;
+}

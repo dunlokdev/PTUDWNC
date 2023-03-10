@@ -1,0 +1,64 @@
+﻿@model Post
+
+@{
+    var imageUrl = string.IsNullOrWhiteSpace(Model.ImageUrl)
+                    ? "/images/image1.png"
+                    : $"/{Model.ImageUrl}";
+}
+
+<article class="blog-entry mb-4">
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="@imageUrl" alt="@Model.Title" class="card-img" />
+            </div>
+
+            <div class="col-md-8">
+                <div class="card-body">
+                    <a class="card-title post-title"
+                       asp-action="post"
+                       asp-route-title="@Model.Title"
+                       asp-route-year="@Model.PostedDate.Year"
+                       asp-route-month="@Model.PostedDate.Month"
+                       asp-route-day="@Model.PostedDate.Day">
+                        @Model.Title
+                    </a>
+
+                    <p class="card-text">
+                        <small class="text-muted">Tác giả: </small>
+                        <a class="text-primary"
+                           asp-action="author"
+                           asp-route-slug="@Model.Author.UrlSlug" >@Model.Author.FullName</a>
+
+                        <small class="text-muted">Chủ đề: </small>
+                        <a class="text-primary"
+                           asp-action="category"
+                           asp-route-slug="@Model.Category.UrlSlug">@Model.Category.Name</a>
+                    </p>
+
+                    <p class="card-text">
+                        @Html.Raw(Model.ShortDescription)
+                    </p>
+
+                    <div class="tag-list">
+                        @*<partial name="_TagList" model="@Model.Tags" />*@
+                        @await Html.PartialAsync("_TagList", @Model.Tags)
+                    </div>
+
+                    <div class="text-end">
+                        <a asp-controller="Blog"
+                           asp-action="Post"
+                           asp-route-year="@Model.PostedDate.Year"
+                           asp-route-month="@Model.PostedDate.Month"
+                           asp-route-day="@Model.PostedDate.Day"
+                           asp-route-slug="@Model.UrlSlug"
+                           class="btn btn-primary"
+                           title="@Model.Title">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

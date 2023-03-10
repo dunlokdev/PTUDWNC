@@ -347,5 +347,12 @@ namespace TatBlog.Services.Blogs
                 nameof(Post.PostedDate), "DESC",
                 cancellationToken);
         }
+
+        public async Task<Author> FindAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Author>()
+                    .FirstOrDefaultAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
+
+        }
     }
 }
