@@ -1,15 +1,12 @@
-﻿<div class="my-4">
+﻿<div class="p-4">
     <partial name="_SearchForm" />
 
     @await Component.InvokeAsync("CategoriesWidget")
+    @await Component.InvokeAsync("OutstandPostWidget")
+    @await Component.InvokeAsync("RandomPostsWidget")
 
-    <h3 class="text-success mb-2">
-        Bài viết nổi bật
-    </h3>
     <h3 class="text-success mb-2">
         Đăng ký nhận tin mới
     </h3>
-    <h3 class="text-success mb-2">
-        Tag Cloud
-    </h3>
+    @await Component.InvokeAsync("TagsWidget")
 </div>

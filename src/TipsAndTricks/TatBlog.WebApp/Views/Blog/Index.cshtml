@@ -12,9 +12,10 @@
             Những bài viết chứa từ khóa '@postQuery.KeyWord'
         </h3>
     }
-    @foreach (var item in Model)
+       @foreach (var item in Model)
     {
-        @await Html.PartialAsync("_PostList", item)
+        @*@await Html.PartialAsync("_PostItem", item)*@
+        <partial name="_PostItem" model="item" />
     }
     @await Html.PartialAsync("_Pager", Model)
 </div>
