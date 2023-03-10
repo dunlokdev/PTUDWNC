@@ -1,8 +1,9 @@
-﻿<div class="my-4 p-4">
+﻿<div class="p-4">
     <partial name="_SearchForm" />
 
     @await Component.InvokeAsync("CategoriesWidget")
     @await Component.InvokeAsync("OutstandPostWidget")
+    @await Component.InvokeAsync("RandomPostsWidget")
 
     <h3 class="text-success mb-2">
         Đăng ký nhận tin mới
