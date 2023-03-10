@@ -220,6 +220,7 @@ namespace TatBlog.Services.Blogs
         CancellationToken cancellationToken = default);
 
         Task<Author> FindAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default);
+        Task<IList<TagItem>> GetListTagItemAsync(CancellationToken cancellationToken = default);
 
 
     }

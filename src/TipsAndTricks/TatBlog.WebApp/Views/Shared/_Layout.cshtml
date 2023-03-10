@@ -2,7 +2,6 @@
 
 <html>
 <head>
-<<<<<<< Updated upstream
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["PageTitle"] - Tips & Tricks Blog</title>
@@ -44,28 +43,3 @@
 </body>
 </html>
 
-=======
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["PageTitle"] - Tips & Tricks Blog</title>
-
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/lib/font-awesome/css/font-awesome.min.css" />
-	<link rel="stylesheet" href="~/css/main.css/" asp-append-version="true" />
-
-	@await RenderSectionAsync("style", required: false)
-</head>
-<body>
-	@*Thanh tiêu đề*@
-	<partial name="_Header" />
-
-	<div class="container-fluid">
-        <div class="row">
-            <div class="col-9">
-				@*Phần nội dung chính*@
-				@RenderBody()
-			</div>
-		</div>
-	</div>
-</body>
-</html>
->>>>>>> Stashed changes

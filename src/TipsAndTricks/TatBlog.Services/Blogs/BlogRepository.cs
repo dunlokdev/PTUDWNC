@@ -58,7 +58,8 @@ namespace TatBlog.Services.Blogs
         {
             IQueryable<Post> postsQuery = _context.Set<Post>()
                 .Include(x => x.Category)
-                .Include(x => x.Author);
+                .Include(x => x.Author)
+                .Include(x=>x.Tags);
 
             if (year > 0)
             {
@@ -353,6 +354,22 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Author>()
                     .FirstOrDefaultAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
 
+        }
+
+        public async Task<IList<TagItem>> GetListTagItemAsync(CancellationToken cancellationToken = default)
+        {
+            IQueryable<Tag> tagItems = _context.Set<Tag>();
+
+            return await tagItems
+                .Select(x => new TagItem()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    UrlSlug = x.UrlSlug,
+                    Description = x.Description,
+                    PostCount = x.Posts.Count(p => p.Published)
+                })
+            .ToListAsync(cancellationToken);
         }
     }
 }

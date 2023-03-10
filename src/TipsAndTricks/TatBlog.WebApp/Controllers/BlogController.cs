@@ -15,7 +15,7 @@ namespace TatBlog.WebApp.Controllers
         public async Task<IActionResult> Index(
             [FromQuery(Name = "k")] string keyword = null,
             [FromQuery(Name = "p")] int pageNumber = 1,
-            [FromQuery(Name = "ps")] int pageSize = 3)
+            [FromQuery(Name = "ps")] int pageSize = 5)
         {
             var postQuery = new PostQuery()
             {
@@ -50,7 +50,7 @@ namespace TatBlog.WebApp.Controllers
             var categorys = await _blogRepository
                             .FindCategoryBySlugAsync(slug);
 
-            ViewBag.NameCat = categorys.Name ?? "Không tìm thấy chủ đề";
+            ViewBag.NameCat = categorys.Name;
             ViewBag.PostQuery = postQuery;
 
             return View(posts);
@@ -78,5 +78,40 @@ namespace TatBlog.WebApp.Controllers
             return View(posts);
         }
 
+        public async Task<IActionResult> Tag(
+           string slug,
+           [FromQuery(Name = "p")] int pageNumber = 1,
+           [FromQuery(Name = "ps")] int pageSize = 3)
+        {
+
+            var postQuery = new PostQuery()
+            {
+                TagSlug = slug,
+                PublishedOnly = true,
+            };
+
+            var posts = await _blogRepository.GetPagedPostsAsync(postQuery, pageNumber, pageSize);
+            ViewBag.PostQuery = postQuery;
+            
+            var tag = await _blogRepository.FindTagBySlugAsync(slug);
+
+            ViewBag.Tag = tag.Name;
+
+            return View(posts);
+        }
+
+        public async Task<IActionResult> Post(
+                string slug,
+                int year,
+                int month,
+                int day)
+        {
+
+            var post = await _blogRepository
+                .GetPostAsync(year, month, slug);
+            //await _blogRepository.IncreaseViewCountAsync(post.Id);
+
+            return View(post);
+        }
     }
 }

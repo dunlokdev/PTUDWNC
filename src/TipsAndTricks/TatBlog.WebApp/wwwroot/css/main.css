@@ -10,3 +10,8 @@ a {
     font-size: 18px;
     font-weight: bold;
 }
+
+.post-img {
+    object-fit: cover;
+    width: 768px;
+}

@@ -27,7 +27,7 @@
 
             endpoint.MapControllerRoute(
                 name: "title-of-post",
-                pattern: "blog/post/{year:int}/{month:int}/{day:int}/{title}",
+                pattern: "blog/post/{year:int}/{month:int}/{day:int}/{slug}",
                 defaults: new { controller = "Blog", action = "Post" });
 
             endpoint.MapControllerRoute(

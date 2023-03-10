@@ -2,7 +2,7 @@
 
 @{
     var imageUrl = string.IsNullOrWhiteSpace(Model.ImageUrl)
-                    ? "/images/image1.png"
+                    ? "https://via.placeholder.com/1368x800?text=Thumbnail"
                     : $"/{Model.ImageUrl}";
 }
 
@@ -17,7 +17,7 @@
                 <div class="card-body">
                     <a class="card-title post-title"
                        asp-action="post"
-                       asp-route-title="@Model.Title"
+                       asp-route-slug="@Model.UrlSlug"
                        asp-route-year="@Model.PostedDate.Year"
                        asp-route-month="@Model.PostedDate.Month"
                        asp-route-day="@Model.PostedDate.Day">
@@ -47,7 +47,7 @@
 
                     <div class="text-end">
                         <a asp-controller="Blog"
-                           asp-action="Post"
+                           asp-action="post"
                            asp-route-year="@Model.PostedDate.Year"
                            asp-route-month="@Model.PostedDate.Month"
                            asp-route-day="@Model.PostedDate.Day"
