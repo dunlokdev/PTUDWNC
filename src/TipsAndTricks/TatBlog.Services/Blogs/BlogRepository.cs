@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -59,7 +54,7 @@ namespace TatBlog.Services.Blogs
             IQueryable<Post> postsQuery = _context.Set<Post>()
                 .Include(x => x.Category)
                 .Include(x => x.Author)
-                .Include(x=>x.Tags);
+                .Include(x => x.Tags);
 
             if (year > 0)
             {
@@ -370,6 +365,11 @@ namespace TatBlog.Services.Blogs
                     PostCount = x.Posts.Count(p => p.Published)
                 })
             .ToListAsync(cancellationToken);
+        }
+
+        public async Task<IList<Author>> GetAuthorsAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Author>().Include(a => a.Posts).ToListAsync(cancellationToken);
         }
     }
 }

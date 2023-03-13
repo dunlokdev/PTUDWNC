@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TatBlog.Core.Contracts;
+﻿using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 
@@ -221,7 +216,6 @@ namespace TatBlog.Services.Blogs
 
         Task<Author> FindAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default);
         Task<IList<TagItem>> GetListTagItemAsync(CancellationToken cancellationToken = default);
-
-
+        Task<IList<Author>> GetAuthorsAsync(CancellationToken cancellationToken = default);
     }
 }
