@@ -19,7 +19,7 @@ namespace TatBlog.WebApp.Areas.Admin.Models
         public int? Year { get; set; }
 
         [DisplayName("Tháng")]
-        public int MyProperty { get; set; }
+        public int? Month { get; set; }
 
         public IEnumerable<SelectListItem> AuthorList { get; set; }
         public IEnumerable<SelectListItem> CategoryList { get; set; }
