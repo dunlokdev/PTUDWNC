@@ -70,7 +70,7 @@ namespace TatBlog.WebApp.Controllers
 
             var posts = await _blogRepository.GetPagedPostsAsync(postQuery, pageNumber, pageSize);
             ViewBag.PostQuery = postQuery;
-            
+
             var author = await _blogRepository.FindAuthorBySlugAsync(slug);
 
             ViewBag.Author = author.FullName;
@@ -92,7 +92,7 @@ namespace TatBlog.WebApp.Controllers
 
             var posts = await _blogRepository.GetPagedPostsAsync(postQuery, pageNumber, pageSize);
             ViewBag.PostQuery = postQuery;
-            
+
             var tag = await _blogRepository.FindTagBySlugAsync(slug);
 
             ViewBag.Tag = tag.Name;
@@ -109,7 +109,7 @@ namespace TatBlog.WebApp.Controllers
 
             var post = await _blogRepository
                 .GetPostAsync(year, month, slug);
-            //await _blogRepository.IncreaseViewCountAsync(post.Id);
+            await _blogRepository.IncreaseViewCountAsync(post.Id);
 
             return View(post);
         }

@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Dynamic.Core;
-using System.Text;
-using System.Threading.Tasks;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
 
@@ -15,7 +10,8 @@ namespace TatBlog.Services.Extentions
         // Tạo biểu thức dùng để sắp xếp dữ liệu
         // Sử dụng sau mệnh đề ORDER BY trong truy vấn
 
-        public static string GetOrderExpression(this IPagingParams pagingParams, string defaultColumn = "Id") {
+        public static string GetOrderExpression(this IPagingParams pagingParams, string defaultColumn = "Id")
+        {
             var column = string.IsNullOrWhiteSpace(pagingParams.SortColumn)
                 ? defaultColumn
                 : pagingParams.SortColumn;
@@ -45,18 +41,18 @@ namespace TatBlog.Services.Extentions
             );
         }
 
-        public static async Task<IPagedList<T>> ToPagedListAsync<T> (
+        public static async Task<IPagedList<T>> ToPagedListAsync<T>(
             this IQueryable<T> source,
             int pageNumber = 1,
             int pageSize = 10,
-            string sortColumn = "Id", 
+            string sortColumn = "Id",
             string sortOrder = "DESC",
             CancellationToken cancellationToken = default)
         {
             var totalCount = await source.CountAsync(cancellationToken);
             var items = await source
                 .OrderBy($"{sortColumn} {sortOrder}")
-                .Skip((pageNumber -1) * pageSize)
+                .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
 

@@ -156,7 +156,7 @@ namespace TatBlog.Services.Blogs
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Post> FindPostByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<Post> GetPostByIdAsync(int postId, bool includeDetails = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Thêm hay cập nhật một bài viết
@@ -164,7 +164,7 @@ namespace TatBlog.Services.Blogs
         /// <param name="post"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<bool> AddOrUpdatePostAsync(Post post, CancellationToken cancellationToken = default);
+        Task<Post> CreateOrUpdatePostAsync(Post post, IEnumerable<string> tags, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Chuyển đổi trạng thái Published của bài viết

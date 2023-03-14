@@ -3,7 +3,7 @@ using TatBlog.Services.Blogs;
 
 namespace TatBlog.WebApp.Components
 {
-    public class OutstandPostWidget: ViewComponent
+    public class OutstandPostWidget : ViewComponent
     {
         private readonly IBlogRepository _blogRepository;
 

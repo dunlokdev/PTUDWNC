@@ -1,11 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Collections.Immutable;
-using TatBlog.Core.Entities;
-using TatBlog.Data.Contexts;
-using TatBlog.Data.Seeders;
-using TatBlog.Services.Blogs;
-using TatBlog.WinApp;
 
 //var context = new BlogDbContext();
 //IBlogRepository blogRepo = new BlogRepository(context);
