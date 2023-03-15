@@ -18,9 +18,11 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         private readonly IMapper _mapper;
         private readonly IMediaManager _mediaManager;
         private readonly IValidator<PostEditModel> _postValidator;
+        private readonly ILogger<PostsController> _logger;
 
-        public PostsController(IBlogRepository blogRepository, IMediaManager mediaManager, IMapper mapper)
+        public PostsController(ILogger<PostsController> logger, IBlogRepository blogRepository, IMediaManager mediaManager, IMapper mapper)
         {
+            _logger = logger;
             _blogRepository = blogRepository;
             _mediaManager = mediaManager;
             _mapper = mapper;
@@ -38,11 +40,15 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             //    Month = model.Month
             //};
 
+            _logger.LogInformation("Tạo điều kiện truy vấn");
             // using library map :D --> fast, concise: gọn
             var postQuery = _mapper.Map<PostQuery>(model);
 
+            _logger.LogInformation("Lấy danh sách bài viết từ CSDL");
+
             ViewBag.PostsList = await _blogRepository.GetPagedPostsAsync(postQuery, 1, 10);
 
+            _logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
             await PopulatePostFilterModeAsync(model);
 
             return View(model);
