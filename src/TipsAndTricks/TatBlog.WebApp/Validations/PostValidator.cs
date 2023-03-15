@@ -53,17 +53,17 @@ namespace TatBlog.WebApp.Validations
                 .Must(HasAtLeastOneTag)
                 .WithMessage("Bạn phải nhập ít nhất một thẻ");
 
-            When(p => p.Id <= 0, () =>
-            {
-                RuleFor(p => p.ImageFile)
-                    .Must(p => p is { Length: > 0 })
-                    .WithMessage("Bạn phải chọn hình ảnh cho bài viết");
-            }).Otherwise(() =>
-            {
-                RuleFor(p => p.ImageFile)
-                    .MustAsync(SetImageIfNotExist)
-                    .WithMessage("Bạn phải chọn hình ảnh cho bài viết");
-            });
+            //When(p => p.Id <= 0, () =>
+            //{
+            //    RuleFor(p => p.ImageFile)
+            //        .Must(p => p is { Length: > 0 })
+            //        .WithMessage("Bạn phải chọn hình ảnh cho bài viết");
+            //}).Otherwise(() =>
+            //{
+            //    RuleFor(p => p.ImageFile)
+            //        .MustAsync(SetImageIfNotExist)
+            //        .WithMessage("Bạn phải chọn hình ảnh cho bài viết");
+            //});
         }
 
         private bool HasAtLeastOneTag(PostEditModel postModel, string selectedTags)

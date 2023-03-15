@@ -105,6 +105,7 @@
         <label asp-for="ImageFile" class="col-sm-2 col-form-label"></label>
         <div class="col-sm-10">
             <input type="file" class="form-control" asp-for="ImageFile" />
+            <span asp-validation-for="ImageFile" class="text-danger"></span>
         </div>
     </div>
 
