@@ -2,7 +2,6 @@
 using System.Linq.Dynamic.Core;
 using TatBlog.Core.Collections;
 using TatBlog.Core.Contracts;
-
 namespace TatBlog.Services.Extentions
 {
     public static class PagedListExtensions
@@ -59,8 +58,5 @@ namespace TatBlog.Services.Extentions
             return new PagedList<T>(
                 items, pageNumber, pageSize, totalCount);
         }
-
-
-
     }
 }
