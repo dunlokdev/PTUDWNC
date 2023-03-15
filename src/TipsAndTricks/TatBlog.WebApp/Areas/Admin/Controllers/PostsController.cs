@@ -1,4 +1,6 @@
-﻿using MapsterMapper;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using TatBlog.Core.DTO;
@@ -6,6 +8,7 @@ using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.Services.Media;
 using TatBlog.WebApp.Areas.Admin.Models;
+using TatBlog.WebApp.Validations;
 
 namespace TatBlog.WebApp.Areas.Admin.Controllers
 {
@@ -14,12 +17,15 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         private readonly IBlogRepository _blogRepository;
         private readonly IMapper _mapper;
         private readonly IMediaManager _mediaManager;
+        private readonly IValidator<PostEditModel> _postValidator;
 
         public PostsController(IBlogRepository blogRepository, IMediaManager mediaManager, IMapper mapper)
         {
             _blogRepository = blogRepository;
             _mediaManager = mediaManager;
             _mapper = mapper;
+            // Khởi tạo validator to post
+            _postValidator = new PostValidator(blogRepository);
         }
         public async Task<IActionResult> Index(PostFilterModel model)
         {
@@ -99,6 +105,12 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(PostEditModel model)
         {
+            var validationResult = await this._postValidator.ValidateAsync(model);
+            if (!validationResult.IsValid)
+            {
+                validationResult.AddToModelState(ModelState);
+            }
+
             if (!ModelState.IsValid)
             {
                 await PopulatePostEditModelAsync(model);
