@@ -135,7 +135,8 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             }
             else
             {
-                _mapper.Map<Post>(post);
+                //_mapper.Map<Post>(post);
+                _mapper.Map(model, post);
                 post.Category = null;
                 post.ModifiedDate = DateTime.Now;
             }
