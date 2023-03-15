@@ -22,3 +22,16 @@
 - Cách đăng ký các dịch vụ cần thiết với DI Container.
 - Cách định nghĩa các endpoint, route template và friendly URL.
 - Kết hợp việc đọc dữ liệu từ CSDL và tạo kết quả trả về cho người dùng
+
+# Lab 3. TAT-BLOG: CHỨC NĂNG CHO NGƯỜI QUẢN TRỊ
+
+- Xây dựng từ đầu đến cuối các chức năng cơ
+  bản dành cho người quản trị của một trang blog đơn giản
+- Cách tạo MVC Area và các thành phần M/V/C để xây dựng các chức năng
+  cho một phân hệ riêng của ứng dụng.
+- Cách xây dựng các chức năng thêm/cập nhật/xóa dữ liệu.
+- Cách kiểm tra tính hợp lệ của dữ liệu sử dụng các Attribute có sẵn và sử
+  dụng gói thư viện FluentValidation.
+- Cách sử dụng gói thư viện Mapster để đơn giản hóa việc sao chép dữ liệu
+  giữa các đối tượng.
+- Cách cấu hình và ghi lại nhật ký hệ thống sử dụng gói thư viện NLog.
