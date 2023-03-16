@@ -212,8 +212,10 @@ namespace TatBlog.Services.Blogs
 
         public async Task ChangeStatusPublishedOfPostAsync(int id, CancellationToken cancellationToken = default)
         {
-            await _context.Set<Post>().Where(p => p.Id == id).ExecuteUpdateAsync(p => p.SetProperty(
-                x => x.Published, x => !x.Published), cancellationToken);
+            var post = await _context.Set<Post>().FindAsync(id);
+
+            post.Published = !post.Published;
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default)

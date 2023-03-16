@@ -171,5 +171,21 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                                    : Json(true);
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePublished(int id)
+        {
+            await _blogRepository.ChangeStatusPublishedOfPostAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeletePost(int id)
+        {
+
+            //await _blogRepository.
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
