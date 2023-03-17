@@ -212,8 +212,10 @@ namespace TatBlog.Services.Blogs
 
         public async Task ChangeStatusPublishedOfPostAsync(int id, CancellationToken cancellationToken = default)
         {
-            await _context.Set<Post>().Where(p => p.Id == id).ExecuteUpdateAsync(p => p.SetProperty(
-                x => x.Published, x => !x.Published), cancellationToken);
+            var post = await _context.Set<Post>().FindAsync(id);
+
+            post.Published = !post.Published;
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default)
@@ -431,5 +433,38 @@ namespace TatBlog.Services.Blogs
 
             return post;
         }
+
+        public async Task<bool> DeletePostByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>()
+                .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
+        }
+
+        public async Task<IPagedList<Category>> GetCategoriesByQuery(CategoryQuery condition, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        {
+            return await FilterCategories(condition).ToPagedListAsync(
+                pageNumber, pageSize,
+                nameof(Category.Name), "DESC",
+                cancellationToken);
+        }
+
+        private IQueryable<Category> FilterCategories(CategoryQuery condition)
+        {
+            IQueryable<Category> categories = _context.Set<Category>();
+
+
+            if (condition.ShowOnMenu)
+            {
+                categories = categories.Where(x => x.ShowOnMenu);
+            }
+
+            if (!string.IsNullOrWhiteSpace(condition.KeyWord))
+            {
+                categories = categories.Where(x => x.Name.Contains(condition.KeyWord) ||
+                                         x.Description.Contains(condition.KeyWord));
+            }
+            return categories;
+        }
+
     }
 }

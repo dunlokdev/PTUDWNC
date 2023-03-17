@@ -217,5 +217,11 @@ namespace TatBlog.Services.Blogs
         Task<Author> FindAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default);
         Task<IList<TagItem>> GetListTagItemAsync(CancellationToken cancellationToken = default);
         Task<IList<Author>> GetAuthorsAsync(CancellationToken cancellationToken = default);
+        Task<bool> DeletePostByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<IPagedList<Category>> GetCategoriesByQuery(
+        CategoryQuery condition,
+        int pageNumber = 1,
+        int pageSize = 10,
+        CancellationToken cancellationToken = default);
     }
 }

@@ -1,0 +1,26 @@
+﻿@model IPagedList<Post>
+
+@if (Model.PageCount > 1)
+{
+    <div class="text-center my-4">
+        @if (Model.HasNextPage)
+        {
+            <a 
+               asp-area="Admin"
+               asp-controller="Posts"
+               asp-action=""
+               asp-route-p="@(Model.PageNumber)"
+               asp-route-ps="@(Model.PageSize + 5)"
+               class="btn btn-outline-primary"> Tải thêm
+            </a>
+        }
+        else
+        {
+            <button type="button"
+                    class="btn btn-outline-secondary"
+                    disabled>
+                    Không còn bài viết nào
+            </button>
+        }
+    </div>
+}

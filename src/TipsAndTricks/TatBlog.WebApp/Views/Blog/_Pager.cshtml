@@ -24,7 +24,8 @@
     <div class="text-center my-4">
         @if (Model.HasPreviousPage)
         {
-            <a asp-controller="Blog"
+            <a 
+               asp-controller="Blog"
                asp-action="@actionName"
                asp-route-slug="@slug"
                asp-route-k="@postQuery.KeyWord"
@@ -60,6 +61,5 @@
                     disabled> Trang sau
             </button>
         }
-
     </div>
 }

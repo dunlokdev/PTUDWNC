@@ -29,7 +29,9 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             // Khởi tạo validator to post
             _postValidator = new PostValidator(blogRepository);
         }
-        public async Task<IActionResult> Index(PostFilterModel model)
+        public async Task<IActionResult> Index(PostFilterModel model,
+            [FromQuery(Name = "p")] int pageNumber = 1,
+            [FromQuery(Name = "ps")] int pageSize = 5)
         {
             //var postQuery = new PostQuery()
             //{
@@ -46,13 +48,15 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             _logger.LogInformation("Lấy danh sách bài viết từ CSDL");
 
-            ViewBag.PostsList = await _blogRepository.GetPagedPostsAsync(postQuery, 1, 10);
-
+            var postList = await _blogRepository.GetPagedPostsAsync(postQuery, pageNumber, pageSize);
+            ViewBag.PostsList = postList;
+            ViewBag.PostQuery = postQuery;
             _logger.LogInformation("Chuẩn bị dữ liệu cho ViewModel");
             await PopulatePostFilterModeAsync(model);
 
             return View(model);
         }
+
 
         private async Task PopulatePostFilterModeAsync(PostFilterModel model)
         {
@@ -135,7 +139,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             }
             else
             {
-                //_mapper.Map<Post>(post);
                 _mapper.Map(model, post);
                 post.Category = null;
                 post.ModifiedDate = DateTime.Now;
@@ -167,7 +170,35 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             return slugIsExisted ? Json($"Slug: '{urlSlug}' đã được sử dụng")
                                    : Json(true);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangePublished(int id)
+        {
+            await _blogRepository.ChangeStatusPublishedOfPostAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var post = await _blogRepository.GetPostByIdAsync(id);
+            // Nếu người dùng có upload hình ảnh minh họa cho bài viết
+            if (post.ImageUrl.Length > 0)
+            {
+                // Nếu thành công, xóa hình ảnh cũ nếu có
+                await _mediaManager.DeleteFileAsync(post.ImageUrl);
+            }
+            await _blogRepository.DeletePostByIdAsync(post.Id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> SwitchPublished(int id)
+        {
+
+            await _blogRepository.ChangeStatusPublishedOfPostAsync(id);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

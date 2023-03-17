@@ -4,9 +4,10 @@
     ViewData["PageTitle"] = "Thêm/Cập nhật bài viết";
 }
 
-<h1>Thêm/Cập nhật bài viết</h1>
+<h1 class="text-center mb-4">Thêm/Cập nhật bài viết</h1>
 
-<form
+<div class="container">
+    <form
     asp-area="Admin"
     asp-controller="Posts"
     asp-action="Edit"
@@ -127,6 +128,7 @@
             class="btn btn-danger"> Hủy & Quay lại</a>
     </div>
 </form>
+</div>
 
 @section scripts
 {
