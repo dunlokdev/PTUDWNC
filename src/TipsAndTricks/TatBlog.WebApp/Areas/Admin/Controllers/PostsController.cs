@@ -170,7 +170,6 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             return slugIsExisted ? Json($"Slug: '{urlSlug}' đã được sử dụng")
                                    : Json(true);
-
         }
 
         [HttpPost]
@@ -201,6 +200,5 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
     }
 }
