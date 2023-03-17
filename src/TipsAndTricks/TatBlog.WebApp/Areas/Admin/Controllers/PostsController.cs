@@ -183,7 +183,22 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> DeletePost(int id)
         {
-            await _blogRepository.DeletePostByIdAsync(id);
+            var post = await _blogRepository.GetPostByIdAsync(id);
+            // Nếu người dùng có upload hình ảnh minh họa cho bài viết
+            if (post.ImageUrl.Length > 0)
+            {
+                // Nếu thành công, xóa hình ảnh cũ nếu có
+                await _mediaManager.DeleteFileAsync(post.ImageUrl);
+            }
+            await _blogRepository.DeletePostByIdAsync(post.Id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> SwitchPublished(int id)
+        {
+
+            await _blogRepository.ChangeStatusPublishedOfPostAsync(id);
+
             return RedirectToAction(nameof(Index));
         }
 
