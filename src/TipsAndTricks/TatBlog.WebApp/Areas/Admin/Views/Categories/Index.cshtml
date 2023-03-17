@@ -1,5 +1,37 @@
-﻿@{
+﻿@model TatBlog.WebApp.Areas.Admin.Models.CategoryFilterModel
+@{
     ViewData["PageTitle"] = "Chủ đề";
+    var categories = ViewBag.categories;
 }
 
 <h1>Danh sách chủ đề</h1>
+
+<partial name="_CategoriesPane" model="Model" />
+
+@if (categories != null && categories.Count > 0)
+{
+    <table class="table table-bordered table-responsive table-striped mt-4">
+        <thead class="table-dark">
+            <tr class="row">
+                <th class="col-3">Chủ đề</th>
+                <th class="col-9">Mô tả</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var category in categories)
+            {
+                <tr class="row">
+                    <td class="col-3">
+                        @category.Name
+                    </td>
+                    <td class="col-9">
+                        @category.Description
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+}
+

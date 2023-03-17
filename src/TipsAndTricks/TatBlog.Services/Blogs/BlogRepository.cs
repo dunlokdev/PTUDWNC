@@ -439,5 +439,32 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Post>()
                 .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
         }
+
+        public async Task<IPagedList<Category>> GetCategoriesByQuery(CategoryQuery condition, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
+        {
+            return await FilterCategories(condition).ToPagedListAsync(
+                pageNumber, pageSize,
+                nameof(Category.Name), "DESC",
+                cancellationToken);
+        }
+
+        private IQueryable<Category> FilterCategories(CategoryQuery condition)
+        {
+            IQueryable<Category> categories = _context.Set<Category>();
+
+
+            if (condition.ShowOnMenu)
+            {
+                categories = categories.Where(x => x.ShowOnMenu);
+            }
+
+            if (!string.IsNullOrWhiteSpace(condition.KeyWord))
+            {
+                categories = categories.Where(x => x.Name.Contains(condition.KeyWord) ||
+                                         x.Description.Contains(condition.KeyWord));
+            }
+            return categories;
+        }
+
     }
 }

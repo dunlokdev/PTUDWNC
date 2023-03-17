@@ -3,7 +3,6 @@
     ViewData["PageTitle"] = "Danh sách bài viết";
 
     var postsList = ViewBag.PostsList as IPagedList<Post>;
-    var postQuery = ViewBag.PostQuery as IPagedList<Post>;
 }
 
 <h1>Danh sách bài viết</h1>
@@ -13,14 +12,14 @@
 @if (postsList != null && postsList.Count > 0)
 {
     <div class="col-12">
-        <table class="table table-bordered table-responsive table-striped w-auto mt-4">
+        <table class="table table-bordered table-responsive table-striped mt-4">
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">Tiêu đề</th>
-                    <th scope="col">Tác giả</th>
-                    <th scope="col">Chủ đề</th>
-                    <th scope="col">Xuất bản</th>
-                    <th scope="col">Xóa</th>
+                    <th width="50%">Tiêu đề</th>
+                    <th width="20%">Tác giả</th>
+                    <th width="10%">Chủ đề</th>
+                    <th width="10%">Xuất bản</th>
+                    <th width="10%">Xóa</th>
                 </tr>
             </thead>
 
@@ -46,7 +45,7 @@
                             @post.Category.Name
                         </td>
                         <td>
-                            <form id="form-published" asp-controller="Posts"
+                            @*<form id="form-published" asp-controller="Posts"
                           asp-area="Admin"
                           asp-controller="Posts"
                           asp-action="ChangePublished"
@@ -60,7 +59,18 @@
                                            onchange="this.form.submit()" />
                                 </div>
 
-                            </form>
+                            </form>*@
+
+                            @*@(post.Published ? "Có" : "Không")*@
+                            <a 
+                                asp-area="Admin"
+                                asp-controller="Posts"
+                                asp-action="SwitchPublished"
+                                asp-route-id="@post.Id"
+                                class="btn btn-secondary"
+                            >
+                                @(post.Published ? "Có" : "Không")
+                            </a>
                         </td>
                         <td>
                             <div class="form-group">
