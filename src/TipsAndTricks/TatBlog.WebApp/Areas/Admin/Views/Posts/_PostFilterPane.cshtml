@@ -44,6 +44,13 @@
     </div>
 
     <div class="col-auto">
+        <div class="form-check">
+            <label class="form-check-label" asp-for="NotPublished"></label>
+            <input class="form-check-input" type="checkbox" asp-for="NotPublished">
+        </div>
+    </div>
+
+    <div class="col-auto">
         <label class="visually-hidden" asp-for="Year"></label>
 
         <input type="text"
@@ -75,7 +82,13 @@
            asp-controller="Posts"
            asp-action="Edit"
            class="btn btn-success">
-           Thêm mới
+            Thêm mới
+        </a>
+
+        <a asp-area="Admin"
+           asp-controller="Posts"
+           asp-action="Index" class="btn btn-outline-danger">
+            Bỏ lọc
         </a>
     </div>
 

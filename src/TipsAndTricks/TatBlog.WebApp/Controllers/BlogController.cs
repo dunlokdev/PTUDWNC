@@ -31,6 +31,7 @@ namespace TatBlog.WebApp.Controllers
         }
 
         public IActionResult About() => View();
+        public IActionResult Admin() => Redirect("~/admin");
         public IActionResult Contact() => View();
         public IActionResult Rss() => Content("Nội dung sẽ được cập nhật");
 

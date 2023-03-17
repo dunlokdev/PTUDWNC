@@ -179,6 +179,21 @@
         "README.md",
         "speakingurl.min.js"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "sweetalert2@11.7.3",
+      "destination": "wwwroot/lib/sweetalert2/",
+      "files": [
+        "LICENSE",
+        "README.md",
+        "dist/sweetalert2.all.js",
+        "dist/sweetalert2.all.min.js",
+        "dist/sweetalert2.css",
+        "dist/sweetalert2.js",
+        "dist/sweetalert2.min.css",
+        "dist/sweetalert2.min.js"
+      ]
     }
   ]
 }

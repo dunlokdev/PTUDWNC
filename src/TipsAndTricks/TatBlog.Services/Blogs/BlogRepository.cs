@@ -433,5 +433,11 @@ namespace TatBlog.Services.Blogs
 
             return post;
         }
+
+        public async Task<bool> DeletePostByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>()
+                .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
+        }
     }
 }

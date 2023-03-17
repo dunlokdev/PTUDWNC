@@ -57,6 +57,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             return View(model);
         }
 
+
         private async Task PopulatePostFilterModeAsync(PostFilterModel model)
         {
             var authors = await _blogRepository.GetAuthorsAsync();
@@ -138,7 +139,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             }
             else
             {
-                _mapper.Map<Post>(post);
+                _mapper.Map(model, post);
                 post.Category = null;
                 post.ModifiedDate = DateTime.Now;
             }
@@ -182,8 +183,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> DeletePost(int id)
         {
-
-            //await _blogRepository.
+            await _blogRepository.DeletePostByIdAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
