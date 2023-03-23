@@ -225,5 +225,7 @@ namespace TatBlog.Services.Blogs
         CancellationToken cancellationToken = default);
 
         Task<IList<AuthorItem>>GetAuthorsMostPost(int number, CancellationToken cancellationToken = default);
+
+        Task<bool> IsCategorySlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default);
     }
 }

@@ -485,5 +485,11 @@ namespace TatBlog.Services.Blogs
                 .Take(number)
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<bool> IsCategorySlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Category>()
+                .AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
+        }
     }
 }

@@ -45,23 +45,6 @@
                             @post.Category.Name
                         </td>
                         <td>
-                            @*<form id="form-published" asp-controller="Posts"
-                          asp-area="Admin"
-                          asp-controller="Posts"
-                          asp-action="ChangePublished"
-                          asp-route-id="@post.Id"
-                                  enctype="multipart/form-data"
-                                  method="post">
-                                <div class="form-check">
-                                    <input class="form-check-input"
-                                   type="checkbox"
-                                   asp-for="@post.Published"
-                                           onchange="this.form.submit()" />
-                                </div>
-
-                            </form>*@
-
-                            @*@(post.Published ? "Có" : "Không")*@
                             <a 
                                 asp-area="Admin"
                                 asp-controller="Posts"
@@ -131,7 +114,7 @@ else
             postId = button.val();
         });
 
-        // When delete author btn clicked
+        // When delete post btn clicked
         btnDeletePost.onclick = function () {
             deleteForm.action += "/" + postId;
             deleteForm.submit();
