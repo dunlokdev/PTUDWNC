@@ -466,5 +466,24 @@ namespace TatBlog.Services.Blogs
             return categories;
         }
 
+        public async Task<IList<AuthorItem>> GetAuthorsMostPost(int number, CancellationToken cancellationToken = default)
+        {
+            var authors = _context.Set<Author>();
+
+            return await authors
+                .Select(a => new AuthorItem
+                {
+                    Id = a.Id,
+                    FullName = a.FullName,
+                    UrlSlug = a.UrlSlug,
+                    ImageUrl = a.ImageUrl,
+                    Email = a.Email,
+                    JoinedDate = a.JoinedDate,
+                    PostCount = a.Posts.Count(p => p.Published),
+                })
+                .OrderByDescending(p => p.PostCount)
+                .Take(number)
+                .ToListAsync(cancellationToken);
+        }
     }
 }

@@ -223,5 +223,7 @@ namespace TatBlog.Services.Blogs
         int pageNumber = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default);
+
+        Task<IList<AuthorItem>>GetAuthorsMostPost(int number, CancellationToken cancellationToken = default);
     }
 }
