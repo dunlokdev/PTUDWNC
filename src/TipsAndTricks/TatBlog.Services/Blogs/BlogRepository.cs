@@ -380,9 +380,20 @@ namespace TatBlog.Services.Blogs
             .ToListAsync(cancellationToken);
         }
 
-        public async Task<IList<Author>> GetAuthorsAsync(CancellationToken cancellationToken = default)
+        public async Task<IList<Author>> GetAuthorsAsync(AuthorQuery condition, CancellationToken cancellationToken = default)
         {
-            return await _context.Set<Author>().Include(a => a.Posts).ToListAsync(cancellationToken);
+            IQueryable<Author> authors = _context.Set<Author>();
+
+            if (condition != null)
+            {
+                if (!string.IsNullOrWhiteSpace(condition.KeyWord))
+                {
+                    authors = authors.Where(x => x.FullName.Contains(condition.KeyWord) ||
+                                             x.Email.Contains(condition.KeyWord));
+                }
+            }
+
+            return await authors.ToListAsync(cancellationToken);
         }
 
         public async Task<Post> CreateOrUpdatePostAsync(Post post, IEnumerable<string> tags, CancellationToken cancellationToken = default)
@@ -490,6 +501,22 @@ namespace TatBlog.Services.Blogs
         {
             return await _context.Set<Category>()
                 .AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
+        }
+
+        public async Task<Author> FindAuthorByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Author>().Where(a => a.Id == id).FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<bool> IsAuthorSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Author>().AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
+        }
+
+        public async Task<bool> AddOrEditAuthorAsync(Author author, CancellationToken cancellationToken = default)
+        {
+            _context.Entry(author).State = author.Id == 0 ? EntityState.Added : EntityState.Modified;
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }

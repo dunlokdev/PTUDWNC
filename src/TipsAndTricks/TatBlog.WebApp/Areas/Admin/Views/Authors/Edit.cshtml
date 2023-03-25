@@ -1,14 +1,14 @@
-﻿@model TatBlog.WebApp.Areas.Admin.Models.CategoryEditModel
+﻿@model TatBlog.WebApp.Areas.Admin.Models.AuthorsEditModel
 
 @{
-    ViewData["PageTitle"] = "Thêm/Cập nhật chủ đề";
+    ViewData["PageTitle"] = "Thêm/Cập nhật tác giả";
 }
 
-<h1 class="text-center mb-4">Thêm/Cập nhật chủ đề</h1>
+<h1 class="text-center mb-4">Thêm/Cập nhật tác giả</h1>
 
 <div class="container">
     <form asp-area="Admin"
-          asp-controller="Categories"
+          asp-controller="Authors"
           asp-action="Edit"
           enctype="multipart/form-data"
           method="post">
@@ -16,11 +16,11 @@
         <input type="hidden" asp-for="Id" />
 
         <div class="row mb-3">
-            <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+            <label asp-for="FullName" class="col-sm-2 col-form-label"></label>
 
             <div class="col-sm-10">
-                <input type="text" class="form-control" asp-for="Name" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <input type="text" class="form-control" asp-for="FullName" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
         </div>
 
@@ -34,23 +34,21 @@
         </div>
 
         <div class="row mb-3">
-            <label asp-for="Description" class="col-sm-2 col-form-label"></label>
+            <label asp-for="Email" class="col-sm-2 col-form-label"></label>
 
             <div class="col-sm-10">
-                <textarea class="form-control" asp-for="Description" rows="10"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <input type="text" class="form-control" asp-for="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
 
+
         <div class="row mb-3">
-            <div class="col-sm-10 offset-sm-2">
-                <div class="form-check">
-                    <input class="form-check-input"
-                           type="checkbox"
-                           asp-for="ShowOnMenu" />
-                    <label class="form-check-label"
-                           asp-for="ShowOnMenu"></label>
-                </div>
+            <label asp-for="Notes" class="col-sm-2 col-form-label"></label>
+
+            <div class="col-sm-10">
+                <textarea class="form-control" asp-for="Notes" rows="10"></textarea>
+                <span asp-validation-for="Notes" class="text-danger"></span>
             </div>
         </div>
 
@@ -73,7 +71,7 @@
 
     <script>
         $(function () {
-            $('#Name').change(function () {
+            $('#FullName').change(function () {
                 var slug = getSlug(this.value);
                 $('#UrlSlug').val(slug).trigger('blur');
             })
