@@ -84,6 +84,5 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             await _blogRepository.DeleteAuthorByIdAsync(post.Id);
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

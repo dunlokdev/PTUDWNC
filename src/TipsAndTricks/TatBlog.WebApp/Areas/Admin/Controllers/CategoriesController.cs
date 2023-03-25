@@ -17,7 +17,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         private readonly IMapper _mapper;
         private readonly IValidator<CategoryEditModel> _validator;
 
-        public CategoriesController(IBlogRepository blogRepository,IMapper mapper)
+        public CategoriesController(IBlogRepository blogRepository, IMapper mapper)
         {
             _blogRepository = blogRepository;
             _mapper = mapper;
@@ -46,7 +46,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             var model = category == null
                 ? new CategoryEditModel()
                 : _mapper.Map<CategoryEditModel>(category);
-            
+
             return View(model);
         }
 
@@ -82,7 +82,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
-         public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var post = await _blogRepository.FindCategoryByIdAsync(id);
             await _blogRepository.DeleteCategoryByIdAsync(post.Id);

@@ -364,20 +364,27 @@ namespace TatBlog.Services.Blogs
 
         }
 
-        public async Task<IList<TagItem>> GetListTagItemAsync(CancellationToken cancellationToken = default)
+        public async Task<IList<TagItem>> GetListTagItemAsync(TagQuery condition, CancellationToken cancellationToken = default)
         {
-            IQueryable<Tag> tagItems = _context.Set<Tag>();
+            var tagItems = _context.Set<Tag>().Select(x => new TagItem()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                UrlSlug = x.UrlSlug,
+                PostCount = x.Posts.Count(p => p.Published)
+            });
 
-            return await tagItems
-                .Select(x => new TagItem()
+            if (condition != null)
+            {
+                if (!string.IsNullOrWhiteSpace(condition.KeyWord))
                 {
-                    Id = x.Id,
-                    Name = x.Name,
-                    UrlSlug = x.UrlSlug,
-                    Description = x.Description,
-                    PostCount = x.Posts.Count(p => p.Published)
-                })
-            .ToListAsync(cancellationToken);
+                    tagItems = tagItems.Where(x => x.Name.Contains(condition.KeyWord) ||
+                                              x.Description.Contains(condition.KeyWord));
+                }
+            }
+
+            return await tagItems.ToListAsync(cancellationToken);
         }
 
         public async Task<IList<Author>> GetAuthorsAsync(AuthorQuery condition, CancellationToken cancellationToken = default)
@@ -523,6 +530,22 @@ namespace TatBlog.Services.Blogs
         {
             return await _context.Set<Author>()
                 .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
+        }
+
+        public async Task<bool> IsTagSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Tag>().AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
+        }
+
+        public async Task<Tag> FindTagById(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Tag>().FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<bool> AddOrEditTagAsync(Tag tag, CancellationToken cancellationToken = default)
+        {
+            _context.Entry(tag).State = tag.Id == 0 ? EntityState.Added : EntityState.Modified;
+            return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
     }
 }
