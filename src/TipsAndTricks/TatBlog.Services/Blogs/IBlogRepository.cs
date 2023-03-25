@@ -230,5 +230,6 @@ namespace TatBlog.Services.Blogs
         Task<Author> FindAuthorByIdAsync(int id, CancellationToken cancellationToken = default);   
         Task<bool> IsAuthorSlugExistedAsync(int id, string slug, CancellationToken cancellationToken= default);
         Task<bool> AddOrEditAuthorAsync(Author author, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAuthorByIdAsync(int id, CancellationToken cancellationToken = default);
     }
 }

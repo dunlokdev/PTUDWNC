@@ -47,7 +47,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit( AuthorsEditModel model)
+        public async Task<IActionResult> Edit(AuthorsEditModel model)
         {
             var isValidation = await _validator.ValidateAsync(model);
 
@@ -77,6 +77,12 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             await _blogRepository.AddOrEditAuthorAsync(author);
             return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> DeleteAuthor(int id)
+        {
+            var post = await _blogRepository.FindAuthorByIdAsync(id);
+            await _blogRepository.DeleteAuthorByIdAsync(post.Id);
+            return RedirectToAction(nameof(Index));
         }
 
     }

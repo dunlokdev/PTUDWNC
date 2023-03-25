@@ -518,5 +518,11 @@ namespace TatBlog.Services.Blogs
             _context.Entry(author).State = author.Id == 0 ? EntityState.Added : EntityState.Modified;
             return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
+
+        public async Task<bool> DeleteAuthorByIdAsync(int id, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Author>()
+                .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
+        }
     }
 }
