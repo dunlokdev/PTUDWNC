@@ -8,5 +8,10 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         {
             return View();
         }
+
+        public IActionResult Home()
+        {
+            return RedirectToAction("Index", "Blog", new { area = "" });
+        }
     }
 }
