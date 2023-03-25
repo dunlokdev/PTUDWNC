@@ -16,6 +16,7 @@ namespace TatBlog.Data.Seeders
         {
             _dbContext.Database.EnsureCreated();
 
+
             if (_dbContext.Posts.Any()) return;
 
             var author = AddAuthors();
@@ -89,6 +90,7 @@ namespace TatBlog.Data.Seeders
                 new() {Name = "Vue.js", Description = "Vue.js", UrlSlug = "vue-js"},
                 new() {Name = "Next.js", Description = "Next.js", UrlSlug = "next-js"},
                 new() {Name = "Node.js", Description = "Node.js", UrlSlug = "node-js"},
+                new() {Name = "Love", Description = "To like another adult very much and be romantically and sexually attracted to them", UrlSlug = "love"},
                 new() {Name = "Golang", Description = "Golang", UrlSlug = "golang"},
                 new() {Name = "Three.js", Description = "Three.js", UrlSlug = "three-js"},
                 new() {Name = "PHP", Description = "PHP", UrlSlug = "php"},

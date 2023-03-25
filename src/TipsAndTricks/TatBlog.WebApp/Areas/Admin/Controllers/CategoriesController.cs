@@ -1,9 +1,13 @@
-﻿using MapsterMapper;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using TatBlog.Core.DTO;
+using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
 using TatBlog.Services.Media;
 using TatBlog.WebApp.Areas.Admin.Models;
+using TatBlog.WebApp.Validations;
 
 namespace TatBlog.WebApp.Areas.Admin.Controllers
 {
@@ -11,15 +15,13 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
     {
         private readonly IBlogRepository _blogRepository;
         private readonly IMapper _mapper;
-        private readonly IMediaManager _mediaManager;
-        private readonly ILogger<PostsController> _logger;
+        private readonly IValidator<CategoryEditModel> _validator;
 
-        public CategoriesController(ILogger<PostsController> logger, IBlogRepository blogRepository, IMediaManager mediaManager, IMapper mapper)
+        public CategoriesController(IBlogRepository blogRepository, IMapper mapper)
         {
-            _logger = logger;
             _blogRepository = blogRepository;
-            _mediaManager = mediaManager;
             _mapper = mapper;
+            _validator = new CategoryValidator(_blogRepository);
         }
 
         public async Task<IActionResult> Index(CategoryFilterModel model,
@@ -33,5 +35,59 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var category = id > 0
+                ? await _blogRepository.FindCategoryByIdAsync(id)
+                : null;
+
+            var model = category == null
+                ? new CategoryEditModel()
+                : _mapper.Map<CategoryEditModel>(category);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CategoryEditModel model)
+        {
+            var isValidation = await _validator.ValidateAsync(model);
+
+            if (!isValidation.IsValid)
+            {
+                isValidation.AddToModelState(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var category = model.Id > 0
+                ? await _blogRepository.FindCategoryByIdAsync(model.Id) : null;
+
+            if (category == null)
+            {
+                category = _mapper.Map<Category>(model);
+                category.Id = 0;
+            }
+            else
+            {
+                _mapper.Map(model, category);
+            }
+
+            await _blogRepository.AddOrEditCategoryAsync(category);
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var post = await _blogRepository.FindCategoryByIdAsync(id);
+            await _blogRepository.DeleteCategoryByIdAsync(post.Id);
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

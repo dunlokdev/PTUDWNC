@@ -215,13 +215,24 @@ namespace TatBlog.Services.Blogs
         CancellationToken cancellationToken = default);
 
         Task<Author> FindAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default);
-        Task<IList<TagItem>> GetListTagItemAsync(CancellationToken cancellationToken = default);
-        Task<IList<Author>> GetAuthorsAsync(CancellationToken cancellationToken = default);
+        Task<IList<TagItem>> GetListTagItemAsync(TagQuery tagQuery = null,CancellationToken cancellationToken = default);
+        Task<IList<Author>> GetAuthorsAsync(AuthorQuery condition = null, CancellationToken cancellationToken = default);
         Task<bool> DeletePostByIdAsync(int id, CancellationToken cancellationToken = default);
         Task<IPagedList<Category>> GetCategoriesByQuery(
         CategoryQuery condition,
         int pageNumber = 1,
         int pageSize = 10,
         CancellationToken cancellationToken = default);
+
+        Task<IList<AuthorItem>>GetAuthorsMostPost(int number, CancellationToken cancellationToken = default);
+
+        Task<bool> IsCategorySlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default);
+        Task<Author> FindAuthorByIdAsync(int id, CancellationToken cancellationToken = default);   
+        Task<bool> IsAuthorSlugExistedAsync(int id, string slug, CancellationToken cancellationToken= default);
+        Task<bool> AddOrEditAuthorAsync(Author author, CancellationToken cancellationToken = default);
+        Task<bool> DeleteAuthorByIdAsync(int id, CancellationToken cancellationToken = default);
+        Task<bool> IsTagSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default);
+        Task<Tag> FindTagById(int id, CancellationToken cancellationToken = default);
+        Task<bool> AddOrEditTagAsync(Tag tag, CancellationToken cancellationToken = default);
     }
 }
