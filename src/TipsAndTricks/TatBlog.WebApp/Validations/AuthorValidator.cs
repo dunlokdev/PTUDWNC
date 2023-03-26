@@ -6,11 +6,11 @@ namespace TatBlog.WebApp.Validations
 {
     public class AuthorValidator : AbstractValidator<AuthorsEditModel>
     {
-        private readonly IBlogRepository blogRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public AuthorValidator(IBlogRepository blogRepository)
+        public AuthorValidator(IAuthorRepository authorRepository)
         {
-            this.blogRepository = blogRepository;
+            this._authorRepository = authorRepository;
 
             // Validator
             RuleFor(a => a.FullName)
@@ -31,7 +31,7 @@ namespace TatBlog.WebApp.Validations
                .WithMessage("Slug không được nhiều hơn 1000 ký tự");
 
             RuleFor(x => x.UrlSlug)
-                .MustAsync(async (authorModel, slug, cancellationToken) => !await blogRepository
+                .MustAsync(async (authorModel, slug, cancellationToken) => !await _authorRepository
                     .IsAuthorSlugExistedAsync(authorModel.Id, slug, cancellationToken))
                     .WithMessage("Slug '{PropertyValue}' đã được sử dụng");
         }

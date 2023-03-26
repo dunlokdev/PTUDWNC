@@ -357,13 +357,6 @@ namespace TatBlog.Services.Blogs
                 cancellationToken);
         }
 
-        public async Task<Author> FindAuthorBySlugAsync(string slug, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Author>()
-                    .FirstOrDefaultAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
-
-        }
-
         public async Task<IList<TagItem>> GetListTagItemAsync(TagQuery condition, CancellationToken cancellationToken = default)
         {
             var tagItems = _context.Set<Tag>().Select(x => new TagItem()
@@ -385,22 +378,6 @@ namespace TatBlog.Services.Blogs
             }
 
             return await tagItems.ToListAsync(cancellationToken);
-        }
-
-        public async Task<IList<Author>> GetAuthorsAsync(AuthorQuery condition, CancellationToken cancellationToken = default)
-        {
-            IQueryable<Author> authors = _context.Set<Author>();
-
-            if (condition != null)
-            {
-                if (!string.IsNullOrWhiteSpace(condition.KeyWord))
-                {
-                    authors = authors.Where(x => x.FullName.Contains(condition.KeyWord) ||
-                                             x.Email.Contains(condition.KeyWord));
-                }
-            }
-
-            return await authors.ToListAsync(cancellationToken);
         }
 
         public async Task<Post> CreateOrUpdatePostAsync(Post post, IEnumerable<string> tags, CancellationToken cancellationToken = default)
@@ -484,54 +461,12 @@ namespace TatBlog.Services.Blogs
             return categories;
         }
 
-        public async Task<IList<AuthorItem>> GetAuthorsMostPost(int number, CancellationToken cancellationToken = default)
-        {
-            var authors = _context.Set<Author>();
-
-            return await authors
-                .Select(a => new AuthorItem
-                {
-                    Id = a.Id,
-                    FullName = a.FullName,
-                    UrlSlug = a.UrlSlug,
-                    ImageUrl = a.ImageUrl,
-                    Email = a.Email,
-                    JoinedDate = a.JoinedDate,
-                    PostCount = a.Posts.Count(p => p.Published),
-                })
-                .OrderByDescending(p => p.PostCount)
-                .Take(number)
-                .ToListAsync(cancellationToken);
-        }
-
         public async Task<bool> IsCategorySlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Category>()
                 .AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
         }
-
-        public async Task<Author> FindAuthorByIdAsync(int id, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Author>().Where(a => a.Id == id).FirstOrDefaultAsync(cancellationToken);
-        }
-
-        public async Task<bool> IsAuthorSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Author>().AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
-        }
-
-        public async Task<bool> AddOrEditAuthorAsync(Author author, CancellationToken cancellationToken = default)
-        {
-            _context.Entry(author).State = author.Id == 0 ? EntityState.Added : EntityState.Modified;
-            return await _context.SaveChangesAsync(cancellationToken) > 0;
-        }
-
-        public async Task<bool> DeleteAuthorByIdAsync(int id, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Author>()
-                .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
-        }
-
+       
         public async Task<bool> IsTagSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Tag>().AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);

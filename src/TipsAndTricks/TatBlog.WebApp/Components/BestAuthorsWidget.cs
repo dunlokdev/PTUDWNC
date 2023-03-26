@@ -6,16 +6,16 @@ namespace TatBlog.WebApp.Components
     [ViewComponent(Name = "BestAuthorsWidget")] 
     public class BestAuthorsWidget: ViewComponent
     {
-        private readonly IBlogRepository _blogRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public BestAuthorsWidget(IBlogRepository blogRepository)
+        public BestAuthorsWidget(IAuthorRepository authorRepository)
         {
-            _blogRepository = blogRepository;
+            _authorRepository = authorRepository;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var authors = await _blogRepository.GetAuthorsMostPost(4);
+            var authors = await _authorRepository.GetAuthorsHasMostPost(4);
             return View(authors);
         }
     }

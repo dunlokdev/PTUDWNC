@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
 using TatBlog.Services.Blogs;
@@ -14,20 +15,30 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
     public class AuthorsController : Controller
     {
         private readonly IBlogRepository _blogRepository;
+        private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<AuthorsEditModel> _validator;
 
-        public AuthorsController(IBlogRepository blogRepository, IMapper mapper)
+        public AuthorsController(IBlogRepository blogRepository, IMapper mapper, IAuthorRepository authorRepository)
         {
             _blogRepository = blogRepository;
             _mapper = mapper;
-            _validator = new AuthorValidator(_blogRepository);
+            _authorRepository = authorRepository;
+            _validator = new AuthorValidator(_authorRepository);
         }
 
-        public async Task<IActionResult> Index(AuthorsFilterModel filter)
+        public async Task<IActionResult> Index(AuthorsFilterModel filter,
+            [FromQuery(Name = "p")] int page = 1,
+            [FromQuery(Name = "ps")] int pageSize = 5)
         {
+            var pagingParams = new PagingParams()
+            {
+                PageNumber = page,
+                PageSize = pageSize
+            };
+
             var query = _mapper.Map<AuthorQuery>(filter);
-            var authors = await _blogRepository.GetAuthorsAsync(query);
+            var authors = await _authorRepository.GetPagedAuthorsAsync(pagingParams, query.KeyWord);
             ViewBag.Authors = authors;
 
             return View();
@@ -37,7 +48,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var author = id > 0
-                ? await _blogRepository.FindAuthorByIdAsync(id)
+                ? await _authorRepository.GetAuthorByIdAsync(id)
                 : null;
 
             var model = author == null
@@ -62,7 +73,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             }
 
             var author = model.Id > 0
-                ? await _blogRepository.FindAuthorByIdAsync(model.Id) : null;
+                ? await _authorRepository.GetAuthorByIdAsync(model.Id) : null;
 
             if (author == null)
             {
@@ -75,13 +86,13 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
                 _mapper.Map(model, author);
             }
 
-            await _blogRepository.AddOrEditAuthorAsync(author);
+            await _authorRepository.AddOrUpdateAsync(author);
             return RedirectToAction("Index");
         }
         public async Task<IActionResult> DeleteAuthor(int id)
         {
-            var post = await _blogRepository.FindAuthorByIdAsync(id);
-            await _blogRepository.DeleteAuthorByIdAsync(post.Id);
+            var post = await _authorRepository.GetAuthorByIdAsync(id);
+            await _authorRepository.DeleteAuthorAsync(post.Id);
             return RedirectToAction(nameof(Index));
         }
     }

@@ -15,12 +15,13 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
     public class PostsController : Controller
     {
         private readonly IBlogRepository _blogRepository;
+        private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
         private readonly IMediaManager _mediaManager;
         private readonly IValidator<PostEditModel> _postValidator;
         private readonly ILogger<PostsController> _logger;
 
-        public PostsController(ILogger<PostsController> logger, IBlogRepository blogRepository, IMediaManager mediaManager, IMapper mapper)
+        public PostsController(ILogger<PostsController> logger, IBlogRepository blogRepository, IMediaManager mediaManager, IMapper mapper, IAuthorRepository authorRepository)
         {
             _logger = logger;
             _blogRepository = blogRepository;
@@ -28,6 +29,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
             _mapper = mapper;
             // Khởi tạo validator to post
             _postValidator = new PostValidator(blogRepository);
+            _authorRepository = authorRepository;
         }
         public async Task<IActionResult> Index(PostFilterModel model,
             [FromQuery(Name = "p")] int pageNumber = 1,
@@ -60,7 +62,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         private async Task PopulatePostFilterModeAsync(PostFilterModel model)
         {
-            var authors = await _blogRepository.GetAuthorsAsync();
+            var authors = await _authorRepository.GetAuthorsAsync();
             var categories = await _blogRepository.GetCategoriesAsync();
 
             model.AuthorList = authors.Select(a => new SelectListItem()
@@ -78,7 +80,7 @@ namespace TatBlog.WebApp.Areas.Admin.Controllers
 
         private async Task PopulatePostEditModelAsync(PostEditModel model)
         {
-            var authors = await _blogRepository.GetAuthorsAsync();
+            var authors = await _authorRepository.GetAuthorsAsync();
             var categories = await _blogRepository.GetCategoriesAsync();
 
             model.AuthorList = authors.Select(a => new SelectListItem()

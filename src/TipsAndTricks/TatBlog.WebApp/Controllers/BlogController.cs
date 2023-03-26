@@ -7,10 +7,12 @@ namespace TatBlog.WebApp.Controllers
     public class BlogController : Controller
     {
         private readonly IBlogRepository _blogRepository;
+        private readonly IAuthorRepository _authorRepository;
 
-        public BlogController(IBlogRepository blogRepository)
+        public BlogController(IBlogRepository blogRepository, IAuthorRepository authorRepository)
         {
             _blogRepository = blogRepository;
+            _authorRepository = authorRepository;
         }
         public async Task<IActionResult> Index(
             [FromQuery(Name = "k")] string keyword = null,
@@ -72,7 +74,7 @@ namespace TatBlog.WebApp.Controllers
             var posts = await _blogRepository.GetPagedPostsAsync(postQuery, pageNumber, pageSize);
             ViewBag.PostQuery = postQuery;
 
-            var author = await _blogRepository.FindAuthorBySlugAsync(slug);
+            var author = await _authorRepository.GetAuthorBySlugAsync(slug);
 
             ViewBag.Author = author.FullName;
 
