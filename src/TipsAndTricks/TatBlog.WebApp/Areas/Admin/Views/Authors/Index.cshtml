@@ -1,7 +1,7 @@
 ﻿@model TatBlog.WebApp.Areas.Admin.Models.AuthorsFilterModel
 @{
     ViewData["PageTitle"] = "Tác giả";
-    var authors = ViewBag.Authors;
+    var authors = ViewBag.Authors as IPagedList<AuthorItem>; ;
 }
 
 <h1>Danh sách tác giả</h1>
@@ -50,6 +50,10 @@
             </tbody>
 
         </table>
+    <div class="text-center">
+        @await Html.PartialAsync("_LoadMore", authors)
+    </div>
+
 }
 
 <!-- Modal -->
