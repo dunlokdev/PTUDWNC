@@ -30,6 +30,11 @@ namespace TatBlog.WebApi.Endpoints
                 .Produces<AuthorItem>()
                 .Produces(404);
 
+            routeGroupBuilder.MapGet("/best/{limit:int}", GetAuthorsHasMostPost)
+                .WithName("GetAuthorsHasMostPost")
+                .Produces<AuthorItem>()
+                .Produces(404);
+
             routeGroupBuilder.MapGet("/{slug:regex(^[a-z0-9_-]+$)}/posts", GetPostsByAuthorSlug)
                 .WithName("GetPostsByAuthorSlug")
                 .Produces<PaginationResult<PostDto>>();
@@ -168,6 +173,12 @@ namespace TatBlog.WebApi.Endpoints
             return await authorRepository.DeleteAuthorAsync(id)
                 ? Results.NoContent()
                 : Results.NotFound($"Không thể tìm thấy tác giả với id = {id}");
+        }
+
+        private static async Task<IResult> GetAuthorsHasMostPost(int limit, IAuthorRepository authorRepository)
+        {
+            var authors = await authorRepository.GetAuthorsHasMostPost(limit);
+            return Results.Ok(authors);
         }
     }
 }

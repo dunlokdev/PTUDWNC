@@ -169,7 +169,7 @@ public class AuthorRepository : IAuthorRepository
 				Notes = a.Notes,
 				PostCount = a.Posts.Count(p => p.Published)
 			})
-			.OrderBy(a => a.FullName)
+			.OrderByDescending(a => a.PostCount)
 			.Take(numberOfAuthors)
 			.ToListAsync(cancellationToken);
     }
