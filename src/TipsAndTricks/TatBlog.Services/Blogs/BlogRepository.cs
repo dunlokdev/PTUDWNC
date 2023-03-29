@@ -482,5 +482,10 @@ namespace TatBlog.Services.Blogs
             _context.Entry(tag).State = tag.Id == 0 ? EntityState.Added : EntityState.Modified;
             return await _context.SaveChangesAsync(cancellationToken) > 0;
         }
+
+        public async Task<IPagedList<T>> GetPagedPostsByQueryAsync<T>(Func<IQueryable<Post>, IQueryable<T>> mapper, PostQuery query, IPagingParams pagingParams, CancellationToken cancellationToken = default)
+        {
+            return await mapper(FilterPosts(query).AsNoTracking()).ToPagedListAsync(pagingParams, cancellationToken);
+        }
     }
 }

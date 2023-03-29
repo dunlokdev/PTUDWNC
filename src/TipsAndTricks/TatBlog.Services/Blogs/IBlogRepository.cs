@@ -225,5 +225,6 @@ namespace TatBlog.Services.Blogs
         Task<bool> IsTagSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default);
         Task<Tag> FindTagById(int id, CancellationToken cancellationToken = default);
         Task<bool> AddOrEditTagAsync(Tag tag, CancellationToken cancellationToken = default);
+        Task<IPagedList<T>> GetPagedPostsByQueryAsync<T>(Func<IQueryable<Post>, IQueryable<T>> mapper, PostQuery query, IPagingParams pagingParams, CancellationToken cancellationToken = default);
     }
 }
