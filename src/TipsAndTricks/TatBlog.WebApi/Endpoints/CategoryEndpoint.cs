@@ -49,6 +49,10 @@ namespace TatBlog.WebApi.Endpoints
                 .Produces(400)
                 .Produces(409);
 
+            routeGroupBuilder.MapDelete("/{id:int}", DeleteCategory)
+               .WithName("DeleteCategory")
+               .Produces(204)
+               .Produces(404);
 
             return app;
         }
@@ -127,5 +131,11 @@ namespace TatBlog.WebApi.Endpoints
                 : Results.NotFound();
         }
 
+        private static async Task<IResult> DeleteCategory(int id, IBlogRepository blogRepository)
+        {
+            return await blogRepository.DeleteCategoryByIdAsync(id)
+                ? Results.NoContent()
+                : Results.NotFound($"Không thể tìm thấy chủ đề nào có id = {id}");
+        }
     }
 }
