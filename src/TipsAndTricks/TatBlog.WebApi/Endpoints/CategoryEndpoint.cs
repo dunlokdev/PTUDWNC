@@ -35,6 +35,13 @@ namespace TatBlog.WebApi.Endpoints
                 .Produces<PaginationResult<PostDto>>()
                 .Produces(404);
 
+            routeGroupBuilder.MapPost("/", AddCategory)
+                .WithName("AddCategory")
+                .AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
+                .Produces(201)
+                .Produces(400)
+                .Produces(409);
+
 
             return app;
         }
@@ -72,8 +79,26 @@ namespace TatBlog.WebApi.Endpoints
                 pagingModel);
             var paginationResult = new PaginationResult<PostDto>(posts);
 
-            return paginationResult.Items.Count() <= 0 ? Results.NotFound($"Không tìm thấy tiêu đề có slug '{slug}'")
-                                : Results.Ok(paginationResult);
+            return paginationResult.Items.Count() <= 0 
+                ? Results.NotFound($"Không tìm thấy tiêu đề có slug '{slug}'")
+                : Results.Ok(paginationResult);
+        }
+
+        private static async Task<IResult> AddCategory(
+            CategoryEditModel model, IBlogRepository blogRepository, IMapper mapper)
+        {
+            if (await blogRepository.IsCategorySlugExistedAsync(0, model.UrlSlug))
+            {
+                return Results.Conflict($"Slug '{model.UrlSlug}' đã được sử dụng");
+            }
+
+            var category = mapper.Map<Category>(model);
+            await blogRepository.AddOrEditCategoryAsync(category);
+
+            return Results.CreatedAtRoute(
+                "GetCategoryById",
+                new { category.Id },
+                mapper.Map<CategoryItem>(category));
         }
 
     }
