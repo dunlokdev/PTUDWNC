@@ -30,6 +30,11 @@ namespace TatBlog.WebApi.Endpoints
                 .Produces<CategoryItem>()
                 .Produces(404);
 
+            routeGroupBuilder.MapGet("/{slug:regex(^[a-z0-9_-]+$)}/posts", GetPostsByCategorySlug)
+                .WithName("GetPostsByCategorySlug")
+                .Produces<PaginationResult<PostDto>>()
+                .Produces(404);
+
 
             return app;
         }
@@ -51,22 +56,25 @@ namespace TatBlog.WebApi.Endpoints
                 : Results.Ok(mapper.Map<CategoryItem>(category));
         }
 
-        //private static async Task<IResult> GetPostsByAuthorId(int id, [AsParameters] PagingModel pagingModel, IBlogRepository blogRepository)
-        //{
-        //    var postQuery = new PostQuery()
-        //    {
-        //        AuthorId = id,
-        //        PublishedOnly = true,
-        //    };
+        private static async Task<IResult> GetPostsByCategorySlug(
+           [FromRoute] string slug,
+           [AsParameters] PagingModel pagingModel,
+           IBlogRepository blogRepository)
+        {
+            var postQuery = new PostQuery()
+            {
+                CategorySlug = slug,
+                PublishedOnly = true
+            };
+            var posts = await blogRepository.GetPagedPostsByQueryAsync(
+                posts => posts.ProjectToType<PostDto>(),
+                postQuery,
+                pagingModel);
+            var paginationResult = new PaginationResult<PostDto>(posts);
 
-        //    var postsList = await blogRepository.GetPagedPostsByQueryAsync(
-        //        posts => posts.ProjectToType<PostDto>(), postQuery, pagingModel);
-
-        //    var paginationResult = new PaginationResult<PostDto>(postsList);
-
-        //    return Results.Ok(paginationResult);
-        //}
-
+            return paginationResult.Items.Count() <= 0 ? Results.NotFound($"Không tìm thấy tiêu đề có slug '{slug}'")
+                                : Results.Ok(paginationResult);
+        }
 
     }
 }
