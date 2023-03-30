@@ -168,10 +168,26 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Category>().AnyAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
         }
 
-        public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
+        public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, string name = null, CancellationToken cancellationToken = default)
         {
-            var categoriesQuery = _context.Set<Category>()
-                .Select(x => new CategoryItem()
+            //var categoriesQuery = _context.Set<Category>()
+            //    .Select(x => new CategoryItem()
+            //    {
+            //        Id = x.Id,
+            //        Name = x.Name,
+            //        UrlSlug = x.UrlSlug,
+            //        Description = x.Description,
+            //        ShowOnMenu = x.ShowOnMenu,
+            //        PostCount = x.Posts.Count(p => p.Published)
+            //    });
+
+            //return await categoriesQuery.ToPagedListAsync(pagingParams, cancellationToken);
+
+            return await _context.Set<Category>()
+                .Include(p => p.Posts)
+                .AsNoTracking()
+                .WhereIf(!string.IsNullOrWhiteSpace(name), x => x.Name.Contains(name))
+                .Select(x => new CategoryItem
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -179,9 +195,8 @@ namespace TatBlog.Services.Blogs
                     Description = x.Description,
                     ShowOnMenu = x.ShowOnMenu,
                     PostCount = x.Posts.Count(p => p.Published)
-                });
-
-            return await categoriesQuery.ToPagedListAsync(pagingParams, cancellationToken);
+                })
+                .ToPagedListAsync(pagingParams, cancellationToken);
         }
 
         public Task<object> CountByMostRecentMonthAsync(int month, CancellationToken cancellationToken = default)
@@ -466,7 +481,7 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Category>()
                 .AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
         }
-       
+
         public async Task<bool> IsTagSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Tag>().AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);

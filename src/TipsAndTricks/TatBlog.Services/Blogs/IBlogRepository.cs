@@ -138,7 +138,8 @@ namespace TatBlog.Services.Blogs
         /// <param name="pagingParams"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default);
+        Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams,
+            string name = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Đếm số lượng bài viết trong N tháng gần nhất. N là tham số đầu vào. Kết
@@ -214,7 +215,7 @@ namespace TatBlog.Services.Blogs
         int pageSize = 10,
         CancellationToken cancellationToken = default);
 
-        Task<IList<TagItem>> GetListTagItemAsync(TagQuery tagQuery = null,CancellationToken cancellationToken = default);
+        Task<IList<TagItem>> GetListTagItemAsync(TagQuery tagQuery = null, CancellationToken cancellationToken = default);
         Task<bool> DeletePostByIdAsync(int id, CancellationToken cancellationToken = default);
         Task<IPagedList<Category>> GetCategoriesByQuery(
         CategoryQuery condition,
