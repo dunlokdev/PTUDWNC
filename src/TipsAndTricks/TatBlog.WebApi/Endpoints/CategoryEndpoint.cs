@@ -42,6 +42,13 @@ namespace TatBlog.WebApi.Endpoints
                 .Produces(400)
                 .Produces(409);
 
+            routeGroupBuilder.MapPut("/{id:int}", UpdateCategory)
+                .WithName("UpdateACategory")
+                .AddEndpointFilter<ValidatorFilter<CategoryEditModel>>()
+                .Produces(204)
+                .Produces(400)
+                .Produces(409);
+
 
             return app;
         }
@@ -99,6 +106,25 @@ namespace TatBlog.WebApi.Endpoints
                 "GetCategoryById",
                 new { category.Id },
                 mapper.Map<CategoryItem>(category));
+        }
+
+        private static async Task<IResult> UpdateCategory(
+            int id,
+            CategoryEditModel model,
+            IBlogRepository blogRepository,
+            IMapper mapper)
+        {
+            if (await blogRepository.IsCategorySlugExistedAsync(id, model.UrlSlug))
+            {
+                return Results.Conflict($"Slug '{model.UrlSlug}' đã được sử dụng");
+            }
+
+            var category = mapper.Map<Category>(model);
+            category.Id = id;
+
+            return await blogRepository.AddOrEditCategoryAsync(category)
+                ? Results.NoContent()
+                : Results.NotFound();
         }
 
     }
