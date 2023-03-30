@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SlugGenerator;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
@@ -11,10 +12,12 @@ namespace TatBlog.Services.Blogs
     public class BlogRepository : IBlogRepository
     {
         private readonly BlogDbContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public BlogRepository(BlogDbContext context)
+        public BlogRepository(BlogDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IList<CategoryItem>> GetCategoriesAsync(bool showOnMenu = false, CancellationToken cancellationToken = default)
@@ -501,6 +504,22 @@ namespace TatBlog.Services.Blogs
         public async Task<IPagedList<T>> GetPagedPostsByQueryAsync<T>(Func<IQueryable<Post>, IQueryable<T>> mapper, PostQuery query, IPagingParams pagingParams, CancellationToken cancellationToken = default)
         {
             return await mapper(FilterPosts(query).AsNoTracking()).ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
+        public async Task<Category> GetCachedCategoryByIdAsync(int categoryId)
+        {
+            return await _memoryCache.GetOrCreateAsync(
+                $"category.by-id.{categoryId}",
+                async (entry) =>
+                {
+                    entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+                    return await GetCategoryByIdAsync(categoryId);
+                });
+        }
+
+        public async Task<Category> GetCategoryByIdAsync(int categoryId)
+        {
+            return await _context.Set<Category>().FindAsync(categoryId);
         }
     }
 }

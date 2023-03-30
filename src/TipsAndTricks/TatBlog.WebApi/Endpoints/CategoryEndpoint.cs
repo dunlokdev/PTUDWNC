@@ -25,6 +25,12 @@ namespace TatBlog.WebApi.Endpoints
                 .WithName("GetCategories")
                 .Produces<PaginationResult<CategoryItem>>();
 
+            routeGroupBuilder.MapGet("/{id:int}", GetCategoyDetails)
+                .WithName("GetCategoryById")
+                .Produces<CategoryItem>()
+                .Produces(404);
+
+
             return app;
         }
 
@@ -37,6 +43,30 @@ namespace TatBlog.WebApi.Endpoints
             return Results.Ok(paginationResult);
         }
 
-        
+        private static async Task<IResult> GetCategoyDetails(int id, IBlogRepository blogRepository, IMapper mapper)
+        {
+            var category = await blogRepository.GetCachedCategoryByIdAsync(id);
+            return category == null
+                ? Results.NotFound($"Không tìm thấy tiêu đề có mã số {id}")
+                : Results.Ok(mapper.Map<CategoryItem>(category));
+        }
+
+        //private static async Task<IResult> GetPostsByAuthorId(int id, [AsParameters] PagingModel pagingModel, IBlogRepository blogRepository)
+        //{
+        //    var postQuery = new PostQuery()
+        //    {
+        //        AuthorId = id,
+        //        PublishedOnly = true,
+        //    };
+
+        //    var postsList = await blogRepository.GetPagedPostsByQueryAsync(
+        //        posts => posts.ProjectToType<PostDto>(), postQuery, pagingModel);
+
+        //    var paginationResult = new PaginationResult<PostDto>(postsList);
+
+        //    return Results.Ok(paginationResult);
+        //}
+
+
     }
 }
