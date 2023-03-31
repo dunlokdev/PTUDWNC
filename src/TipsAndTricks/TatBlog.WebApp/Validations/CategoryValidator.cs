@@ -6,11 +6,11 @@ namespace TatBlog.WebApp.Validations
 {
     public class CategoryValidator : AbstractValidator<CategoryEditModel>
     {
-        private readonly IBlogRepository _blogRepo;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryValidator(IBlogRepository blogRepo)
+        public CategoryValidator(ICategoryRepository blogRepo)
         {
-            _blogRepo = blogRepo;
+            _categoryRepository = blogRepo;
 
             RuleFor(s => s.Name)
                 .NotEmpty().WithMessage("Tên chủ đề không được bỏ trống")
@@ -29,7 +29,7 @@ namespace TatBlog.WebApp.Validations
 
             RuleFor(s => s.UrlSlug)
                 .MustAsync(async (categoryModel, slug, cancellationToken) =>
-                    !await _blogRepo.IsCategorySlugExistedAsync(categoryModel.Id, slug, cancellationToken))
+                    !await _categoryRepository.IsCategorySlugExistedAsync(categoryModel.Id, slug, cancellationToken))
                 .WithMessage("Slug '{PropertyValue}' đã được sử dụng");
         }
     }

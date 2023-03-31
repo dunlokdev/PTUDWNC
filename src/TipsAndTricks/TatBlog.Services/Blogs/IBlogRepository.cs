@@ -50,16 +50,6 @@ namespace TatBlog.Services.Blogs
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Lấy danh sách chuyên mục và số lượng bài viết nằm thuộc từng chuyên mục chủ đề
-        /// </summary>
-        /// <param name="showOnMenu"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<IList<CategoryItem>> GetCategoriesAsync(
-            bool showOnMenu = false,
-            CancellationToken cancellationToken = default);
-
-        /// <summary>
         /// Lấy danh sách từ khoá/thẻ và phân trang theo
         /// các tham số pagingParams
         /// </summary>
@@ -92,55 +82,7 @@ namespace TatBlog.Services.Blogs
         /// <returns></returns>
         Task<bool> DeleteTagByIdAsync(int id, CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// Tìm một chuyên mục (Category) theo tên định danh (slug).
-        /// </summary>
-        /// <param name="slug"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Category> FindCategoryBySlugAsync(string slug, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Tìm một chuyên mục theo mã số cho trước
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<Category> FindCategoryByIdAsync(int id, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Thêm hoặc cập nhật một chuyên mục/chủ đề.
-        /// </summary>
-        /// <param name="newCategory"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<bool> AddOrEditCategoryAsync(Category newCategory, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Xóa một chuyên mục theo mã số cho trước
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<bool> DeleteCategoryByIdAsync(int id, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Kiểm tra tên định danh (slug) của một chuyên mục đã tồn tại hay chưa.
-        /// </summary>
-        /// <param name="slug"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<bool> IsSlugOfCategoryExist(string slug, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Lấy và phân trang danh sách chuyên mục, kết quả trả về kiểu IPagedList<CategoryItem>
-        /// </summary>
-        /// <param name="pagingParams"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams,
-            string name = null, CancellationToken cancellationToken = default);
-
+       
         /// <summary>
         /// Đếm số lượng bài viết trong N tháng gần nhất. N là tham số đầu vào. Kết
         /// quả là một danh sách các đối tượng chứa các thông tin sau: Năm, Tháng, Số
@@ -217,17 +159,9 @@ namespace TatBlog.Services.Blogs
 
         Task<IList<TagItem>> GetListTagItemAsync(TagQuery tagQuery = null, CancellationToken cancellationToken = default);
         Task<bool> DeletePostByIdAsync(int id, CancellationToken cancellationToken = default);
-        Task<IPagedList<Category>> GetCategoriesByQuery(
-        CategoryQuery condition,
-        int pageNumber = 1,
-        int pageSize = 10,
-        CancellationToken cancellationToken = default);
-        Task<bool> IsCategorySlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default);
         Task<bool> IsTagSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default);
         Task<Tag> FindTagById(int id, CancellationToken cancellationToken = default);
         Task<bool> AddOrEditTagAsync(Tag tag, CancellationToken cancellationToken = default);
         Task<IPagedList<T>> GetPagedPostsByQueryAsync<T>(Func<IQueryable<Post>, IQueryable<T>> mapper, PostQuery query, IPagingParams pagingParams, CancellationToken cancellationToken = default);
-        Task<Category> GetCategoryByIdAsync(int categoryId);
-        Task<Category> GetCachedCategoryByIdAsync(int categoryId);
     }
 }

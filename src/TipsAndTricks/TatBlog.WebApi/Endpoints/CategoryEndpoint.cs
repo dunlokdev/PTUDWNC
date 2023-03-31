@@ -57,18 +57,18 @@ namespace TatBlog.WebApi.Endpoints
             return app;
         }
 
-        private static async Task<IResult> GetCategories([AsParameters] CategoryFilterModel model, IBlogRepository blogRepository)
+        private static async Task<IResult> GetCategories([AsParameters] CategoryFilterModel model, ICategoryRepository categoryRepository)
         {
             // model kế thừa từ PagingModel
-            var categories = await blogRepository.GetPagedCategoriesAsync(model, model.Name);
+            var categories = await categoryRepository.GetPagedCategoriesAsync(model, model.Name);
 
             var paginationResult = new PaginationResult<CategoryItem>(categories);
             return Results.Ok(paginationResult);
         }
 
-        private static async Task<IResult> GetCategoyDetails(int id, IBlogRepository blogRepository, IMapper mapper)
+        private static async Task<IResult> GetCategoyDetails(int id, ICategoryRepository categoryRepository, IMapper mapper)
         {
-            var category = await blogRepository.GetCachedCategoryByIdAsync(id);
+            var category = await categoryRepository.GetCachedCategoryByIdAsync(id);
             return category == null
                 ? Results.NotFound($"Không tìm thấy tiêu đề có mã số {id}")
                 : Results.Ok(mapper.Map<CategoryItem>(category));
@@ -96,15 +96,15 @@ namespace TatBlog.WebApi.Endpoints
         }
 
         private static async Task<IResult> AddCategory(
-            CategoryEditModel model, IBlogRepository blogRepository, IMapper mapper)
+            CategoryEditModel model, ICategoryRepository categoryRepository, IMapper mapper)
         {
-            if (await blogRepository.IsCategorySlugExistedAsync(0, model.UrlSlug))
+            if (await categoryRepository.IsCategorySlugExistedAsync(0, model.UrlSlug))
             {
                 return Results.Conflict($"Slug '{model.UrlSlug}' đã được sử dụng");
             }
 
             var category = mapper.Map<Category>(model);
-            await blogRepository.AddOrEditCategoryAsync(category);
+            await categoryRepository.AddOrEditCategoryAsync(category);
 
             return Results.CreatedAtRoute(
                 "GetCategoryById",
@@ -115,10 +115,10 @@ namespace TatBlog.WebApi.Endpoints
         private static async Task<IResult> UpdateCategory(
             int id,
             CategoryEditModel model,
-            IBlogRepository blogRepository,
+            ICategoryRepository categoryRepository,
             IMapper mapper)
         {
-            if (await blogRepository.IsCategorySlugExistedAsync(id, model.UrlSlug))
+            if (await categoryRepository.IsCategorySlugExistedAsync(id, model.UrlSlug))
             {
                 return Results.Conflict($"Slug '{model.UrlSlug}' đã được sử dụng");
             }
@@ -126,14 +126,14 @@ namespace TatBlog.WebApi.Endpoints
             var category = mapper.Map<Category>(model);
             category.Id = id;
 
-            return await blogRepository.AddOrEditCategoryAsync(category)
+            return await categoryRepository.AddOrEditCategoryAsync(category)
                 ? Results.NoContent()
                 : Results.NotFound();
         }
 
-        private static async Task<IResult> DeleteCategory(int id, IBlogRepository blogRepository)
+        private static async Task<IResult> DeleteCategory(int id, ICategoryRepository categoryRepository)
         {
-            return await blogRepository.DeleteCategoryByIdAsync(id)
+            return await categoryRepository.DeleteCategoryByIdAsync(id)
                 ? Results.NoContent()
                 : Results.NotFound($"Không thể tìm thấy chủ đề nào có id = {id}");
         }
