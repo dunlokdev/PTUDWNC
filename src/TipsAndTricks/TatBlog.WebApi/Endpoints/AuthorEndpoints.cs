@@ -83,9 +83,6 @@ namespace TatBlog.WebApi.Endpoints
         private static async Task<IResult> GetAuthorDetails(int id, IAuthorRepository authorRepository, IMapper mapper)
         {
             var author = await authorRepository.GetCachedAuthorByIdAsync(id);
-            //return author == null
-            //    ? Results.NotFound($"Không tìm thấy tác giả có mã số {id}")
-            //    : Results.Ok(mapper.Map<AuthorItem>(author));
 
             return author == null
                 ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy tác giả có mã số {id}"))
