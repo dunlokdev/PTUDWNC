@@ -20,7 +20,7 @@ namespace TatBlog.Services.Blogs
             _memoryCache = memoryCache;
         }
 
-        
+
         public async Task<IList<Post>> GetPopularArticleAsync(int numPosts, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Post>()
@@ -119,7 +119,7 @@ namespace TatBlog.Services.Blogs
             return await _context.Set<Tag>()
                 .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
         }
-       
+
         public Task<object> CountByMostRecentMonthAsync(int month, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
@@ -154,12 +154,14 @@ namespace TatBlog.Services.Blogs
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default)
+        public async Task<IList<Post>> GetRandomsPostsAsync(int num, CancellationToken cancellationToken = default)
         {
+            // OrderBy theo Guid random để xáo trộn List trả về
             return await _context.Set<Post>()
                 .Include(a => a.Author)
                 .Include(c => c.Category)
-                .OrderBy(x => x.Id)
+                .OrderBy(x => Guid.NewGuid())
+                .Where(p => p.Published)
                 .Take(num)
                 .ToListAsync(cancellationToken);
         }

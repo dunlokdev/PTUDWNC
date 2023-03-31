@@ -123,7 +123,7 @@ namespace TatBlog.Services.Blogs
         /// <param name="num"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default);
+        Task<IList<Post>> GetRandomsPostsAsync(int num, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Tìm tất cả bài viết thỏa mãn điều kiện tìm kiếm được cho trong đối tượng PostQuery (kết quả trả về kiểu IList<Post>)

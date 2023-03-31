@@ -22,6 +22,10 @@ namespace TatBlog.WebApi.Endpoints
                 .WithName("GetPopularArticle")
                 .Produces<ApiResponse<IList<PostDto>>>();
 
+            routeGroupBuilder.MapGet("/random/{limit:int}", GetRandomPosts)
+                .WithName("GetRandomPosts")
+                .Produces<ApiResponse<IList<PostDto>>>();
+
             return app;
         }
         /// <summary>
@@ -50,9 +54,23 @@ namespace TatBlog.WebApi.Endpoints
             return Results.Ok(paginationResult);
         }
 
+        /// <summary>
+        /// Lấy danh sách N (limit) bài viết nhiều người đọc nhất.
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="blogRepository"></param>
+        /// <param name="mapper"></param>
+        /// <returns></returns>
         private static async Task<IResult> GetPopularArticle(int limit, IBlogRepository blogRepository, IMapper mapper)
         {
             var posts = await blogRepository.GetPopularArticleAsync(limit);
+
+            return Results.Ok(value: mapper.Map<IList<PostDto>>(posts));
+        }
+
+        private static async Task<IResult> GetRandomPosts(int limit, IBlogRepository blogRepository, IMapper mapper)
+        {
+            var posts = await blogRepository.GetRandomsPostsAsync(limit);
 
             return Results.Ok(value: mapper.Map<IList<PostDto>>(posts));
         }
