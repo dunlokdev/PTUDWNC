@@ -11,6 +11,7 @@ using TatBlog.Services.Media;
 using TatBlog.WebApi.Extensions;
 using TatBlog.WebApi.Filters;
 using TatBlog.WebApi.Models;
+using TatBlog.WebApi.Models.Post;
 using TatBlog.WebApi.Validations;
 
 namespace TatBlog.WebApi.Endpoints

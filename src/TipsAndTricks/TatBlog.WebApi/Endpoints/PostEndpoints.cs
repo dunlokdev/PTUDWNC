@@ -4,6 +4,7 @@ using TatBlog.Core.Collections;
 using TatBlog.Core.DTO;
 using TatBlog.Services.Blogs;
 using TatBlog.WebApi.Models;
+using TatBlog.WebApi.Models.Post;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TatBlog.WebApi.Endpoints
@@ -30,12 +31,20 @@ namespace TatBlog.WebApi.Endpoints
         /// <param name="categoryRepository"></param>
         /// <returns></returns>
         private static async Task<IResult> GetPosts(
-            [AsParameters] PostQuery model,
+            [AsParameters] PostFilterModel model,
             [AsParameters] PagingModel pagingModel,
-            IBlogRepository blogRepository)
+            IBlogRepository blogRepository,
+            IMapper mapper)
         {
-            var posts = await blogRepository.GetPagedPostsByQueryAsync(
-                posts => posts.ProjectToType<PostDto>(), model, pagingModel);
+            // Tạo điều kiện truy vấn
+            // Vì để field Published là optional nên cần check trường hợp là null để gán phù hợp
+            if (model.Published == null) { model.Published = true; }
+            var postQuery = mapper.Map<PostQuery>(model);
+
+            var posts = await blogRepository.GetPagedPostsByQueryAsync<PostDto>(
+                posts => posts.ProjectToType<PostDto>(),
+                postQuery,
+                pagingModel);
 
             var paginationResult = new PaginationResult<PostDto>(posts);
             return Results.Ok(paginationResult);
