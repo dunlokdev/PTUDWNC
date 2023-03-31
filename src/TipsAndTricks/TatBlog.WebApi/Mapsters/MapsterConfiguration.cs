@@ -20,10 +20,12 @@ namespace TatBlog.WebApi.Mapsters
                 .Map(dest => dest.PostCount,
                 src => src.Posts == null ? 0 : src.Posts.Count);
             config.NewConfig<PostFilterModel, PostQuery>()
-              .Map(dest => dest.PublishedOnly, src => src.Published == true ? true : false )
-              .Map(dest => dest.NotPublished, src => src.Published != true ? true : false );
+                .Map(dest => dest.PublishedOnly, src => src.Published == true ? true : false)
+                .Map(dest => dest.NotPublished, src => src.Published != true ? true : false);
 
             config.NewConfig<Post, PostDto>();
+            config.NewConfig<PostEditModel, Post>()
+                .Ignore(dest => dest.ImageUrl);
             config.NewConfig<Post, PostDetail>();
         }
     }
