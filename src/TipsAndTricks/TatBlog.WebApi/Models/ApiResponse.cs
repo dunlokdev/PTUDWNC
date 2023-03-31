@@ -8,7 +8,7 @@ namespace TatBlog.WebApi.Models
     public class ApiResponse
     {
         public bool IsSuccess => Errors.Count == 0;
-        public HttpStatusCode StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; init; }
         public IList<string> Errors { get; init; }
 
         protected ApiResponse()
@@ -47,7 +47,7 @@ namespace TatBlog.WebApi.Models
         {
             if (errorMessages == null || errorMessages.Length == 0)
             {
-                throw new ArgumentException(nameof(errorMessages));
+                throw new ArgumentNullException(nameof(errorMessages));
             }
 
             return new ApiResponse()

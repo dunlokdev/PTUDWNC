@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using MapsterMapper;
+using System.Collections.Generic;
 using TatBlog.Core.Collections;
 using TatBlog.Core.DTO;
 using TatBlog.Services.Blogs;
@@ -68,12 +69,26 @@ namespace TatBlog.WebApi.Endpoints
             return Results.Ok(value: mapper.Map<IList<PostDto>>(posts));
         }
 
+        /// <summary>
+        /// Lấy ngẫu nhiên một danh sách N (limit) bài viết.
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="blogRepository"></param>
+        /// <param name="mapper"></param>
+        /// <returns></returns>
         private static async Task<IResult> GetRandomPosts(int limit, IBlogRepository blogRepository, IMapper mapper)
         {
             var posts = await blogRepository.GetRandomsPostsAsync(limit);
 
             return Results.Ok(value: mapper.Map<IList<PostDto>>(posts));
         }
+
+        //private static async Task<IResult> GetPostsInMonthly(
+        //    int limit,
+        //    IBlogRepository blogRepository)
+        //{
+
+        //}
 
     }
 }
