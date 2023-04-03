@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SlugGenerator;
+using System.Runtime.Serialization;
 using TatBlog.Core.Contracts;
 using TatBlog.Core.DTO;
 using TatBlog.Core.Entities;
@@ -11,34 +13,14 @@ namespace TatBlog.Services.Blogs
     public class BlogRepository : IBlogRepository
     {
         private readonly BlogDbContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public BlogRepository(BlogDbContext context)
+        public BlogRepository(BlogDbContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
-        public async Task<IList<CategoryItem>> GetCategoriesAsync(bool showOnMenu = false, CancellationToken cancellationToken = default)
-        {
-            IQueryable<Category> categories = _context.Set<Category>();
-
-            if (showOnMenu)
-            {
-                categories = categories.Where(x => x.ShowOnMenu);
-            }
-
-            return await categories
-                .OrderBy(x => x.Name)
-                .Select(x => new CategoryItem()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    UrlSlug = x.UrlSlug,
-                    Description = x.Description,
-                    ShowOnMenu = x.ShowOnMenu,
-                    PostCount = x.Posts.Count(p => p.Published)
-                })
-                .ToListAsync(cancellationToken);
-        }
 
         public async Task<IList<Post>> GetPopularArticleAsync(int numPosts, CancellationToken cancellationToken = default)
         {
@@ -139,56 +121,6 @@ namespace TatBlog.Services.Blogs
                 .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
         }
 
-        public async Task<Category> FindCategoryBySlugAsync(string slug, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Category>()
-                    .FirstOrDefaultAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
-        }
-
-        public async Task<Category> FindCategoryByIdAsync(int id, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Category>()
-                .FindAsync(id, cancellationToken);
-        }
-
-        public async Task<bool> AddOrEditCategoryAsync(Category newCategory, CancellationToken cancellationToken = default)
-        {
-            _context.Entry(newCategory).State = newCategory.Id == 0 ? EntityState.Added : EntityState.Modified;
-            return await _context.SaveChangesAsync(cancellationToken) > 0;
-        }
-
-        public async Task<bool> DeleteCategoryByIdAsync(int id, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Category>()
-                .Where(c => c.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
-        }
-
-        public async Task<bool> IsSlugOfCategoryExist(string slug, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Category>().AnyAsync(c => c.UrlSlug.Equals(slug), cancellationToken);
-        }
-
-        public async Task<IPagedList<CategoryItem>> GetPagedCategoriesAsync(IPagingParams pagingParams, CancellationToken cancellationToken = default)
-        {
-            var categoriesQuery = _context.Set<Category>()
-                .Select(x => new CategoryItem()
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    UrlSlug = x.UrlSlug,
-                    Description = x.Description,
-                    ShowOnMenu = x.ShowOnMenu,
-                    PostCount = x.Posts.Count(p => p.Published)
-                });
-
-            return await categoriesQuery.ToPagedListAsync(pagingParams, cancellationToken);
-        }
-
-        public Task<object> CountByMostRecentMonthAsync(int month, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<Post> GetPostByIdAsync(
      int postId, bool includeDetails = false,
      CancellationToken cancellationToken = default)
@@ -218,12 +150,14 @@ namespace TatBlog.Services.Blogs
             await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<IList<Post>> GetPostsByQualAsync(int num, CancellationToken cancellationToken = default)
+        public async Task<IList<Post>> GetRandomsPostsAsync(int num, CancellationToken cancellationToken = default)
         {
+            // OrderBy theo Guid random để xáo trộn List trả về
             return await _context.Set<Post>()
                 .Include(a => a.Author)
                 .Include(c => c.Category)
-                .OrderBy(x => x.Id)
+                .OrderBy(x => Guid.NewGuid())
+                .Where(p => p.Published)
                 .Take(num)
                 .ToListAsync(cancellationToken);
         }
@@ -435,38 +369,7 @@ namespace TatBlog.Services.Blogs
                 .Where(t => t.Id == id).ExecuteDeleteAsync(cancellationToken) > 0;
         }
 
-        public async Task<IPagedList<Category>> GetCategoriesByQuery(CategoryQuery condition, int pageNumber = 1, int pageSize = 10, CancellationToken cancellationToken = default)
-        {
-            return await FilterCategories(condition).ToPagedListAsync(
-                pageNumber, pageSize,
-                nameof(Category.Name), "DESC",
-                cancellationToken);
-        }
 
-        private IQueryable<Category> FilterCategories(CategoryQuery condition)
-        {
-            IQueryable<Category> categories = _context.Set<Category>();
-
-
-            if (condition.ShowOnMenu)
-            {
-                categories = categories.Where(x => x.ShowOnMenu);
-            }
-
-            if (!string.IsNullOrWhiteSpace(condition.KeyWord))
-            {
-                categories = categories.Where(x => x.Name.Contains(condition.KeyWord) ||
-                                         x.Description.Contains(condition.KeyWord));
-            }
-            return categories;
-        }
-
-        public async Task<bool> IsCategorySlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Category>()
-                .AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
-        }
-       
         public async Task<bool> IsTagSlugExistedAsync(int id, string slug, CancellationToken cancellationToken = default)
         {
             return await _context.Set<Tag>().AnyAsync(x => x.Id != id && x.UrlSlug == slug, cancellationToken);
@@ -486,6 +389,49 @@ namespace TatBlog.Services.Blogs
         public async Task<IPagedList<T>> GetPagedPostsByQueryAsync<T>(Func<IQueryable<Post>, IQueryable<T>> mapper, PostQuery query, IPagingParams pagingParams, CancellationToken cancellationToken = default)
         {
             return await mapper(FilterPosts(query).AsNoTracking()).ToPagedListAsync(pagingParams, cancellationToken);
+        }
+
+        public async Task<IList<MonthlyPostCountItem>> CountMonthlyPostsAsync(
+            int numMonths, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>()
+                .GroupBy(x => new { x.PostedDate.Year, x.PostedDate.Month })
+                .Select(g => new MonthlyPostCountItem()
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    PostCount = g.Count(x => x.Published)
+                })
+                .Take(numMonths)
+                .OrderByDescending(x => x.Year)
+                .ThenByDescending(x => x.Month)
+                .ToListAsync(cancellationToken);
+        }
+
+        public Task<Post> GetPostBySlugAsync(string slug, bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            if (!includeDetails)
+            {
+                return _context.Set<Post>()
+                  .Where(p => p.UrlSlug == slug)
+                  .FirstOrDefaultAsync(cancellationToken);
+            }
+            return _context.Set<Post>()
+              .Include(p => p.Author)
+              .Include(p => p.Tags)
+              .Include(p => p.Category)
+              .Where(p => p.UrlSlug == slug)
+              .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<bool> SetImageUrlPostAsync(int postId, string imageUrl, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Post>()
+              .Where(p => p.Id == postId)
+              .ExecuteUpdateAsync(p =>
+                p.SetProperty(p => p.ImageUrl, p => imageUrl)
+                 .SetProperty(p => p.ModifiedDate, p => DateTime.Now),
+                cancellationToken) > 0;
         }
     }
 }

@@ -8,11 +8,13 @@ namespace TatBlog.WebApp.Controllers
     {
         private readonly IBlogRepository _blogRepository;
         private readonly IAuthorRepository _authorRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public BlogController(IBlogRepository blogRepository, IAuthorRepository authorRepository)
+        public BlogController(IBlogRepository blogRepository, IAuthorRepository authorRepository, ICategoryRepository categoryRepository)
         {
             _blogRepository = blogRepository;
             _authorRepository = authorRepository;
+            _categoryRepository = categoryRepository;
         }
         public async Task<IActionResult> Index(
             [FromQuery(Name = "k")] string keyword = null,
@@ -50,7 +52,7 @@ namespace TatBlog.WebApp.Controllers
             };
 
             var posts = await _blogRepository.GetPagedPostsAsync(postQuery, pageNumber, pageSize);
-            var categorys = await _blogRepository
+            var categorys = await _categoryRepository
                             .FindCategoryBySlugAsync(slug);
 
             ViewBag.NameCat = categorys.Name;

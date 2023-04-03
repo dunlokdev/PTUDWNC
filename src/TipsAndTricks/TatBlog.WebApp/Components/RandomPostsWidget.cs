@@ -14,7 +14,7 @@ namespace TatBlog.WebApp.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var posts = await _blogRepository.GetPostsByQualAsync(5);
+            var posts = await _blogRepository.GetRandomsPostsAsync(5);
 
             return View(posts);
         }
