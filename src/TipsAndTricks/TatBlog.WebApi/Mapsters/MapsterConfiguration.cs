@@ -21,6 +21,7 @@ namespace TatBlog.WebApi.Mapsters
                 src => src.Posts == null ? 0 : src.Posts.Count);
             config.NewConfig<PostFilterModel, PostQuery>()
                 .Map(dest => dest.PublishedOnly, src => src.Published == true ? true : false)
+                .Map(dest => dest.KeyWord, src => src.Keyword)
                 .Map(dest => dest.NotPublished, src => src.Published != true ? true : false);
 
             config.NewConfig<Post, PostDto>();
