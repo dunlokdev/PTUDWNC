@@ -1,6 +1,7 @@
 import TagList from './TagList'
 import Card from 'react-bootstrap/Card'
 import { Link } from 'react-router-dom'
+import styles from '../styles/PostItem.module.css'
 import { isEmptyOrSpaces } from '../utils/Utils'
 
 const PostItem = ({ post }) => {
@@ -14,20 +15,26 @@ const PostItem = ({ post }) => {
     <article className='blog-entry mb-4'>
       <Card>
         <div className='row g-0'>
-          <div className='col-md-4'>
-            <Card.Img variant='top' src={imageUrl} alt={post.title} />
+          <div className='col-md-3'>
+            <Card.Img variant='top' className={styles.img} src={imageUrl} alt={post.title} />
           </div>
 
-          <div className='col-md-8'>
+          <div className='col-md-9'>
             <Card.Body>
-              <Card.Title>{post.title}</Card.Title>
+              <Card.Title>
+                <Link to={`/blog/post/${post.urlSlug}`}>{post.title}</Link>
+              </Card.Title>
 
               <Card.Text>
                 <small className='text-text-muted'>Tác giả: </small>
-                <span className='text-primary m-1'>{post.author.fullname}</span>
+                <Link to={`/blog/author/${post.author.urlSlug}`}>
+                  <span className='text-primary m-1'>{post.author.fullName}</span>
+                </Link>
 
                 <small className='text-text-muted'>Chủ đề: </small>
-                <span className='text-primary m-1'>{post.category.name}</span>
+                <Link to={`/blog/category/${post.category.urlSlug}`}>
+                  <span className='text-primary m-1'>{post.category.name}</span>
+                </Link>
               </Card.Text>
 
               <Card.Text>{post.shortDescription}</Card.Text>
@@ -38,9 +45,7 @@ const PostItem = ({ post }) => {
 
               <div className='text-end'>
                 <Link
-                  to={`/blog/post?year=${postedDate.getFullYear()}&month=${postedDate.getMonth()}&day=${postedDate.getDay()}&slug=${
-                    post.urlSlug
-                  }`}
+                  to={`/blog/post/${post.urlSlug}`}
                   className='btn btn-primary'
                   title={post.title}
                 >

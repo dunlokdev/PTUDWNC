@@ -4,6 +4,14 @@ const blogApi = {
   getAll(params) {
     const url = '/posts'
     return axiosClient.get(url, { params })
+  },
+  getFeature(limit) {
+    const url = `/posts/featured/${limit}`
+    return axiosClient.get(url)
+  },
+  getDetailBySlug(slug) {
+    const url = `/posts/byslug/${slug}`
+    return axiosClient.get(url)
   }
 }
 

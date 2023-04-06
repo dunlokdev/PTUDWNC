@@ -8,6 +8,7 @@ import Layout from './pages/Layout'
 import Contact from './pages/Contact'
 import About from './pages/About'
 import Rss from './pages/Rss'
+import PostDetail from './pages/PostDetail'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path='/' element={<Layout />}>
                   <Route path='/' element={<Index />} />
                   <Route path='blog' element={<Index />} />
+                  <Route path='blog/post/:slug' element={<PostDetail />} />
                   <Route path='blog/contact' element={<Contact />} />
                   <Route path='blog/About' element={<About />} />
                   <Route path='blog/Rss' element={<Rss />} />
