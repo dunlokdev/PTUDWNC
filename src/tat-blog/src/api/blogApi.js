@@ -9,6 +9,10 @@ const blogApi = {
     const url = `/posts/featured/${limit}`
     return axiosClient.get(url)
   },
+  getRandom(limit) {
+    const url = `/posts/random/${limit}`
+    return axiosClient.get(url)
+  },
   getDetailBySlug(slug) {
     const url = `/posts/byslug/${slug}`
     return axiosClient.get(url)

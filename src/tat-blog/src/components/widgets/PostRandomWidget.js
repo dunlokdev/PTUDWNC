@@ -9,7 +9,7 @@ export default function CategoriesWidget() {
   useEffect(() => {
     ;(async () => {
       try {
-        const data = await blogApi.getFeature(3)
+        const data = await blogApi.getRandom(5)
         if (data.isSuccess) {
           setPostsFeature(data.result)
         }
@@ -21,7 +21,7 @@ export default function CategoriesWidget() {
 
   return (
     <div className='mb-4'>
-      <h3 className='mb-2 text-success'>Top 3 bài viết nổi bật</h3>
+      <h3 className='mb-2 text-success'>Top 5 bài viết ngẫu nhiên</h3>
       {postsFeature.length > 0 && (
         <ListGroup>
           {postsFeature.map((post, index) => {

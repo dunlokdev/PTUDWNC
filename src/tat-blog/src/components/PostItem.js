@@ -9,7 +9,7 @@ const PostItem = ({ post }) => {
     ? process.env.PUBLIC_URL + '/images/img1.jpg'
     : `${post.imageUrl}`
 
-  let postedDate = new Date(post.postedDate)
+  // let postedDate = new Date(post.postedDate)
 
   return (
     <article className='blog-entry mb-4'>
