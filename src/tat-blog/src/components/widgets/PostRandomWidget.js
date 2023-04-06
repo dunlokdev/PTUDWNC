@@ -25,17 +25,9 @@ export default function CategoriesWidget() {
       {postsFeature.length > 0 && (
         <ListGroup>
           {postsFeature.map((post, index) => {
-            let postedDate = new Date(post.postedDate)
-
             return (
               <ListGroup.Item key={index}>
-                <Link to={`/blog/category?slug=${post.urlSlug}`} title={post.description}></Link>
-
-                <Link
-                  to={`/blog/post/${postedDate.getFullYear()}/${postedDate.getMonth()}/${postedDate.getDay()}/${
-                    post.urlSlug
-                  }`}
-                >
+                <Link to={`/blog/post/${post.urlSlug}`}>
                   {post.title}
                   <span>&nbsp;({post.viewCount})</span>
                 </Link>

@@ -1,7 +1,5 @@
-import { Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 export default function Pager({ postQuery, metadata }) {
   const { keyword } = postQuery || ''
@@ -14,29 +12,25 @@ export default function Pager({ postQuery, metadata }) {
           {hasPreviousPage ? (
             <Link
               to={`/blog/?Keyword=${keyword}&PageNumber=${pageNumber - 1}&PageSize=${pageSize}`}
-              className='btn btn-info'
+              className='btn btn-primary'
             >
-              <FontAwesomeIcon icon={faArrowLeft} />
-              &nbsp;Trang trước
+              Trang trước
             </Link>
           ) : (
             <Button variant='outline-secondary' disabled>
-              <FontAwesomeIcon icon={faArrowLeft} />
-              &nbsp;Trang trước
+              Trang trước
             </Button>
           )}
           {hasNextPage ? (
             <Link
               to={`/blog/?Keyword=${keyword}&PageNumber=${pageNumber + 1}&PageSize=${pageSize}`}
-              className='btn btn-info ms-1'
+              className='btn btn-primary ms-1'
             >
-              Trang sau&nbsp;
-              <FontAwesomeIcon icon={faArrowRight} />
+              Trang sau
             </Link>
           ) : (
             <Button variant='outline-secondary' className='ms-1' disabled>
-              Trang sau&nbsp;
-              <FontAwesomeIcon icon={faArrowRight} />
+              Trang sau
             </Button>
           )}
         </div>

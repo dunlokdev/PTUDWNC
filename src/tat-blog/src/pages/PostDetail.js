@@ -3,7 +3,6 @@ import { Card } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import blogApi from '../api/blogApi'
 import styles from '../styles/PostItem.module.css'
-import { isEmptyOrSpaces } from '../utils/Utils'
 import TagList from '../components/TagList'
 
 PostDetail.propTypes = {}
@@ -13,6 +12,7 @@ function PostDetail(props) {
   const { slug } = useParams()
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     ;(async () => {
       try {
         const data = await blogApi.getDetailBySlug(slug)
@@ -26,13 +26,16 @@ function PostDetail(props) {
     })()
   }, [slug])
 
-  let imageUrl = isEmptyOrSpaces(post.imageUrl)
-    ? process.env.PUBLIC_URL + '/images/img1.jpg'
-    : `${post.imageUrl}`
+  let imageUrl = '/images/tips.jpg'
 
   return (
     <div>
-      <Card.Img variant='top' className={styles.img} src={imageUrl} alt={post.title} />
+      <Card.Img
+        variant='top'
+        style={{ height: '300px', objectFit: 'contain' }}
+        src={imageUrl}
+        alt={post.title}
+      />
 
       <Card.Body>
         <Card.Title>

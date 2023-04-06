@@ -1,62 +1,39 @@
-import TagList from './TagList'
-import Card from 'react-bootstrap/Card'
+import React from 'react'
 import { Link } from 'react-router-dom'
+import TagList from '../components/TagList'
 import styles from '../styles/PostItem.module.css'
 import { isEmptyOrSpaces } from '../utils/Utils'
 
 const PostItem = ({ post }) => {
-  let imageUrl = isEmptyOrSpaces(post.imageUrl)
-    ? process.env.PUBLIC_URL + '/images/img1.jpg'
-    : `${post.imageUrl}`
+  const { urlSlug, title, shortDescription, imageUrl, category, author, tags } = post
 
-  // let postedDate = new Date(post.postedDate)
+  // let img = isEmptyOrSpaces(post.imageUrl)
+  //   ? process.env.PUBLIC_URL + '/images/tips.jpg'
+  //   : `${imageUrl}`
 
   return (
-    <article className='blog-entry mb-4'>
-      <Card>
-        <div className='row g-0'>
-          <div className='col-md-3'>
-            <Card.Img variant='top' className={styles.img} src={imageUrl} alt={post.title} />
-          </div>
-
-          <div className='col-md-9'>
-            <Card.Body>
-              <Card.Title>
-                <Link to={`/blog/post/${post.urlSlug}`}>{post.title}</Link>
-              </Card.Title>
-
-              <Card.Text>
-                <small className='text-text-muted'>Tác giả: </small>
-                <Link to={`/blog/author/${post.author.urlSlug}`}>
-                  <span className='text-primary m-1'>{post.author.fullName}</span>
-                </Link>
-
-                <small className='text-text-muted'>Chủ đề: </small>
-                <Link to={`/blog/category/${post.category.urlSlug}`}>
-                  <span className='text-primary m-1'>{post.category.name}</span>
-                </Link>
-              </Card.Text>
-
-              <Card.Text>{post.shortDescription}</Card.Text>
-
-              <div className='tag-list'>
-                <TagList tagList={post.tags} />
-              </div>
-
-              <div className='text-end'>
-                <Link
-                  to={`/blog/post/${post.urlSlug}`}
-                  className='btn btn-primary'
-                  title={post.title}
-                >
-                  Xem chi tiết
-                </Link>
-              </div>
-            </Card.Body>
-          </div>
-        </div>
-      </Card>
-    </article>
+    <div className={`card ${styles.card}`}>
+      <img src={'/images/tips.jpg'} className={`card-img-top ${styles.img}`} alt={title} />
+      <div className='card-body'>
+        <Link className='text-decoration-none' to={`/blog/post/${urlSlug}`} title='Read details'>
+          <h5 className={`card-title ${styles.clamp}`}>{title}</h5>
+        </Link>
+        <TagList tags={tags} />
+        <p className='text-muted mb-0'>
+          Category:
+          <Link className='text-decoration-none' to={`/blog/category/${category.urlSlug}`}>
+            {category.name}
+          </Link>
+        </p>
+        <p className='text-muted'>
+          Author:
+          <Link className='text-decoration-none' to={`/blog/author/${author.urlSlug}`}>
+            {author.fullName}
+          </Link>
+        </p>
+        <p className={`card-text ${styles.clamp}`} >{shortDescription}</p>
+      </div>
+    </div>
   )
 }
 

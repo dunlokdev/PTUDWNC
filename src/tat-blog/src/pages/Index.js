@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import blogApi from '../api/blogApi'
-import styles from '../styles/Index.module.css'
-import PostItem from '../components/PostItem'
 import Pager from '../components/Pager'
+import PostGrid from '../components/PostGrid'
+import styles from '../styles/Index.module.css'
 
 export default function Home() {
   const [postList, setPostList] = useState([])
@@ -17,7 +17,7 @@ export default function Home() {
 
   const query = useQuery()
   const keyword = query.get('Keyword') ?? ''
-  const pageSize = query.get('PageSize') ?? 5
+  const pageSize = query.get('PageSize') ?? 6
   const pageNumber = query.get('PageNumber') ?? 1
 
   useEffect(() => {
@@ -33,9 +33,7 @@ export default function Home() {
         console.log(error)
       }
 
-      setTimeout(() => {
-        setLoading(false)
-      }, 2000)
+      setLoading(false)
     })()
   }, [keyword, pageSize, pageNumber])
 
@@ -45,26 +43,15 @@ export default function Home() {
 
   return (
     <>
-      {/* {postList.length > 0 ? (
-        <div className='p-4'>
-          {postList.map((post) => (
-            <PostItem key={post.id} post={post} />
-          ))}
-          <Pager postQuery={{ keyword }} metadata={metadata} />
-        </div>
-      ) : (
-        <h1 className='text-danger'>Loading</h1>
-      )} */}
-
       {loading ? (
         <div className={styles.loaderContainer}>
           <div className={styles.spinner}></div>
         </div>
       ) : (
-        <div className='p-4'>
-          {postList.map((post) => (
-            <PostItem key={post.id} post={post} />
-          ))}
+        <div className='mb-5 mt-3'>
+          <h3 className='text-center text-primary mb-4'>Danh sách các bài viết</h3>
+
+          <PostGrid columns={3} articles={postList} />
           <Pager postQuery={{ keyword }} metadata={metadata} />
         </div>
       )}
