@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import blogApi from '../api/blogApi'
-import Pager from '../components/Pager'
-import PostGrid from '../components/PostGrid'
+import Pager from '../components/blog/Pager'
+import PostGrid from '../components/blog/PostGrid'
 import styles from '../styles/Index.module.css'
 
 export default function Home() {

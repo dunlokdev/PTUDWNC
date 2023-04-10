@@ -1,9 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import SearchForm from './SearchForm'
-import PostRandomWidget from './widgets/PostRandomWidget'
-import CategoriesWidget from './widgets/CategoriesWidget'
-import PostWidget from './widgets/PostWidget'
+import CategoriesWidget from '../widgets/CategoriesWidget'
+import PostWidget from '../widgets/PostWidget'
+import PostRandomWidget from '../widgets/PostRandomWidget'
 
 Sidebar.propTypes = {}
 

@@ -66,7 +66,6 @@ namespace TatBlog.WebApi.Endpoints
                 .Produces(401)
                 .Produces<ApiResponse<string>>();
 
-
             return app;
         }
 
