@@ -4,6 +4,7 @@ import { redirect, useNavigate } from 'react-router-dom'
 const Badrequest = () => {
   let query = useQuery()
   const redirectTo = query.get('redirectTo') ?? '/'
+  console.log('redirectTo: ', redirectTo)
   const navigate = useNavigate()
 
   return (
@@ -121,7 +122,7 @@ const Badrequest = () => {
         <button
           className='btn btn-outline-primary'
           onClick={() => {
-            navigate('/')
+            navigate(redirectTo)
           }}
         >
           Quay lại trang chủ

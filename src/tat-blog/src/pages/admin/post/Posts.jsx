@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import blogApi from '../../../api/blogApi'
 import Loading from '../../../components/Loading'
-import { Table } from 'react-bootstrap'
+import { Button, Modal, Table } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import PostFilterPane from '../../../components/admin/PostFilterPane'
+import ModalPost from '../../../components/blog/ModalPost'
 
 const Posts = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [show, setShow] = useState(false)
+  const [id, setId] = useState()
 
   const [filters, setFilters] = useState({
     Keyword: '',
@@ -35,6 +38,10 @@ const Posts = () => {
     setFilters(newFilters)
   }
 
+  const handleOnShow = (value) => {
+    setShow(value)
+  }
+
   return (
     <>
       <PostFilterPane postQuery={filters} onChange={handeFilterChange} />
@@ -48,6 +55,7 @@ const Posts = () => {
               <th>Tác giả</th>
               <th>Chủ đề</th>
               <th>Xuất bản</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -55,14 +63,24 @@ const Posts = () => {
               posts.map((post) => (
                 <tr key={post.id}>
                   <td>
-                    <Link to={`/admin/posts/edit/${post.id}`} className='text-bold'>
+                    <p
+                      onClick={() => {
+                        setId(post.id)
+                        setShow(true)
+                      }}
+                      className='text-bold fw-bold text-primary mb-0 poi'
+                      style={{ cursor: 'pointer' }}
+                    >
                       {post.title}
-                    </Link>
+                    </p>
                     <p className='text-muted'>{post.shortDescription}</p>
                   </td>
                   <td>{post.author.fullName}</td>
                   <td>{post.category.name}</td>
                   <td>{post.published ? 'Có' : 'Không'}</td>
+                  <td>
+                    <button className='btn btn-danger btn-sm'>Xoá</button>
+                  </td>
                 </tr>
               ))
             ) : (
@@ -75,6 +93,7 @@ const Posts = () => {
           </tbody>
         </Table>
       )}
+      {show && <ModalPost show={show} onShow={handleOnShow} id={id} />}
     </>
   )
 }
