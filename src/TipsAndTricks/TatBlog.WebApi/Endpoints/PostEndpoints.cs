@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.OpenApi.Writers;
 using SlugGenerator;
@@ -179,7 +180,7 @@ namespace TatBlog.WebApi.Endpoints
 
             if (string.IsNullOrWhiteSpace(imgUrl))
             {
-                return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest,"Không lưu được tập tin"));
+                return Results.Ok(ApiResponse.Fail(HttpStatusCode.BadRequest, "Không lưu được tập tin"));
             }
 
             await blogRepository.SetImageUrlPostAsync(id, imgUrl);
@@ -187,7 +188,7 @@ namespace TatBlog.WebApi.Endpoints
         }
 
         // Cập nhật thông tin của bài viết có mã số(id) cho trước
-        private static async Task<IResult> UpdatePost(int id, PostEditModel model ,IBlogRepository blogRepository, IMapper mapper)
+        private static async Task<IResult> UpdatePost(int id, PostEditModel model, IBlogRepository blogRepository, IMapper mapper)
         {
             if (await blogRepository.IsPostSlugExistedAsync(id, model.UrlSlug))
             {
@@ -210,8 +211,7 @@ namespace TatBlog.WebApi.Endpoints
         {
             return await blogRepository.DeletePostByIdAsync(id)
                     ? Results.Ok(ApiResponse.Success($"Xóa thành công bài viết có Id = {id}"))
-                    : Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound,$"Không tìm thấy bài viết có Id = {id}"));
+                    : Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy bài viết có Id = {id}"));
         }
-
     }
 }

@@ -9,9 +9,9 @@ export default function CategoriesWidget() {
   useEffect(() => {
     ;(async () => {
       try {
-        const data = await categoryApi.getAll({ PageSize: 10, PageNumber: 1 })
+        const data = await categoryApi.getAll()
         if (data.isSuccess) {
-          setCategories(data.result.items)
+          setCategories(data.result)
         }
       } catch (error) {
         console.log(error)

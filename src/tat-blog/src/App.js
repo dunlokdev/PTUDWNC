@@ -9,6 +9,7 @@ import Rss from './pages/Rss'
 import AdminLayout from './pages/admin/AdminLayout'
 import NotFound from './pages/NotFound'
 import Badrequest from './pages/Badrequest'
+import Posts from './pages/admin/post/Posts'
 
 function App() {
   return (
@@ -23,7 +24,9 @@ function App() {
             <Route path='blog/About' element={<About />} />
             <Route path='blog/Rss' element={<Rss />} />
           </Route>
-          <Route path='/admin' element={<AdminLayout />} />
+          <Route path='/admin' element={<AdminLayout />}>
+            <Route index element={<Posts />} />
+          </Route>
           <Route path='/400' element={<Badrequest />} />
           <Route path='*' element={<NotFound />} />
         </Routes>

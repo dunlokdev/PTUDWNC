@@ -1,10 +1,10 @@
 import axiosClient from './axiosClient'
 
-const categoryApi = {
+const authorApi = {
   getAll() {
-    const url = '/categories'
+    const url = '/authors'
     return axiosClient.get(url)
   }
 }
 
-export default categoryApi
+export default authorApi

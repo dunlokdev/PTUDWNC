@@ -25,7 +25,12 @@ namespace TatBlog.WebApi.Endpoints
 
             routeGroupBuilder.MapGet("/", GetAuthors)
                 .WithName("GetAuthors")
+                .Produces<ApiResponse<AuthorItem>>();
+
+            routeGroupBuilder.MapGet("/pagination", GetAuthorsPagination)
+                .WithName("GetAuthorsPagination")
                 .Produces<ApiResponse<PaginationResult<AuthorItem>>>();
+
 
             routeGroupBuilder.MapGet("/{id:int}", GetAuthorDetails)
                 .WithName("GetAuthorById")
@@ -69,7 +74,15 @@ namespace TatBlog.WebApi.Endpoints
             return app;
         }
 
-        private static async Task<IResult> GetAuthors([AsParameters] AuthorFilterModel model, IAuthorRepository authorRepository)
+        private static async Task<IResult> GetAuthors(IAuthorRepository authorRepository)
+        {
+            var authors = await authorRepository.GetAuthorsAsync();
+
+            return Results.Ok(ApiResponse.Success(authors));
+        }
+
+
+        private static async Task<IResult> GetAuthorsPagination([AsParameters] AuthorFilterModel model, IAuthorRepository authorRepository)
         {
             var authorList = await authorRepository.GetPagedAuthorsAsync(model, model.Name);
 

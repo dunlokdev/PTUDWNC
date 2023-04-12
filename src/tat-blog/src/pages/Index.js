@@ -4,6 +4,7 @@ import blogApi from '../api/blogApi'
 import Pager from '../components/blog/Pager'
 import PostGrid from '../components/blog/PostGrid'
 import styles from '../styles/Index.module.css'
+import Loading from '../components/Loading'
 
 export default function Home() {
   const [postList, setPostList] = useState([])
@@ -44,9 +45,7 @@ export default function Home() {
   return (
     <>
       {loading ? (
-        <div className={styles.loaderContainer}>
-          <div className={styles.spinner}></div>
-        </div>
+        <Loading />
       ) : (
         <div className='mb-5 mt-3'>
           <h3 className='text-center text-primary mb-4'>Danh sách các bài viết</h3>
