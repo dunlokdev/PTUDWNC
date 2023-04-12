@@ -6,7 +6,7 @@ const Navigation = () => {
     <Navbar
       collapseOnSelect
       expand='sm'
-      bg='white'
+      bg='light'
       variant='light'
       className='border-bottom shadow'
     >

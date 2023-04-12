@@ -7,6 +7,8 @@ import Layout from './pages/Layout'
 import PostDetail from './pages/PostDetail'
 import Rss from './pages/Rss'
 import AdminLayout from './pages/admin/AdminLayout'
+import NotFound from './pages/NotFound'
+import Badrequest from './pages/Badrequest'
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <Route path='blog/Rss' element={<Rss />} />
           </Route>
           <Route path='/admin' element={<AdminLayout />} />
+          <Route path='/400' element={<Badrequest />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
