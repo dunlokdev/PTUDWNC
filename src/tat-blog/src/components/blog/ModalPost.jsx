@@ -6,10 +6,67 @@ import authorApi from '../../api/authorApi'
 import categoryApi from '../../api/categoryApi'
 import blogApi from '../../api/blogApi'
 
-const ModalPost = ({ show, onShow, id }) => {
-  const [authors, setAuthors] = useState([])
-  const [categories, setCategories] = useState([])
-  const [post, setPost] = useState({})
+const ModalPost = ({ show, onShow, id, handleSubmit }) => {
+  /*
+  {
+    "id": 1,
+    "title": "Cách dễ nhất để học HTML CSS cho người mới bắt đầu!",
+    "shortDescription": "Thực hành 8 dự án trên Figma, 300+ bài tập và thử thách, mua một lần học mãi mãi, được thiết kế và hướng dẫn bởi Sơn Đặng.",
+    "description": "Thực hành 8 dự án với thiết kế trên Figma\r\nFigma là công cụ thiết kế UI/UX hàng đầu thế giới hiện nay. Với 8 dự án thực hành trên Figma, bạn có thể tự làm lại hầu hết mọi giao diện trang web mà bạn thấy.\r\n\r\nKhóa học được thiết kế bởi Sơn Đặng\r\nSơn Đặng là CEO - Founder của Cộng Đồng Học Lập Trình F8. Hiện tại, anh vẫn là một Fullstack developer với hơn 8 năm kinh nghiệm làm việc thực tế.",
+    "meta": "post-01",
+    "urlSlug": "cach-de-nhat-de-hoc-html-css-cho-nguoi-moi-bat-dau",
+    "imageUrl": "uploads/pictures/d32727c7856b4be780bfa1d1fde5daaf.png",
+    "viewCount": 5,
+    "postedDate": "2023-02-22T01:20:00",
+    "modifiedDate": "2023-03-25T18:52:16.087",
+    "category": {
+      "id": 1,
+      "name": ".NET Core",
+      "urlSlug": "net-core"
+    },
+    "author": {
+      "id": 8,
+      "fullName": "Dương Mỹ Lộc",
+      "urlSlug": "duong-my-loc"
+    },
+    "tags": [
+      {
+        "id": 24,
+        "name": "HTML",
+        "urlSlug": "html"
+      },
+      {
+        "id": 25,
+        "name": "CSS",
+        "urlSlug": "css"
+      },
+      {
+        "id": 26,
+        "name": "PRO",
+        "urlSlug": "pro"
+      }
+    ]
+  },
+  */
+  const [post, setPost] = useState({
+    id: 0,
+    title: '',
+    shortDescription: '',
+    description: '',
+    meta: '',
+    urlSlug: '',
+    imageUrl: '',
+    category: {},
+    author: {},
+    tags: [],
+    selectedTags: '',
+    published: true
+  })
+
+  const [filter, setFilter] = useState({
+    authorList: [],
+    categoryList: []
+  })
 
   useEffect(() => {
     ;(async () => {
@@ -28,15 +85,16 @@ const ModalPost = ({ show, onShow, id }) => {
     })()
   }, [id])
 
-  const idRef = useRef()
-  const titleRef = useRef()
-  const shortDescriptionRef = useRef()
-  const descriptionRef = useRef()
-  const metaRef = useRef()
-  const urlSlugRef = useRef()
-  const tagRef = useRef()
-  const authorRef = useRef()
-  const categoryRef = useRef()
+  const getTags = () => {
+    const list = []
+    let tags = ''
+    post?.tags?.forEach((element) => {
+      list.push(element.name)
+      tags = list.join()
+    })
+
+    return tags
+  }
 
   const handleClose = () => {
     onShow(false)
@@ -44,15 +102,12 @@ const ModalPost = ({ show, onShow, id }) => {
 
   const handleEditSubmit = (e) => {
     e.preventDefault()
+    if (!handleSubmit) return
 
-    console.log(titleRef.current.value)
-    console.log(shortDescriptionRef.current.value)
-    console.log(descriptionRef.current.value)
-    console.log(metaRef.current.value)
-    console.log(urlSlugRef.current.value)
-    console.log(tagRef.current.value)
-    console.log(categoryRef.current.value)
-    console.log(authorRef.current.value)
+    const newPost = {
+      ...post
+    }
+    // handleSubmit(newPost)
   }
 
   return (
@@ -62,15 +117,17 @@ const ModalPost = ({ show, onShow, id }) => {
           <Modal.Title>Thêm/Sửa</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Control type='hidden' readOnly name='id' ref={idRef} defaultValue={post.id} />
+          <Form.Control type='hidden' readOnly name='id' value={post.id} />
           <div className='row mb-3'>
             <Form.Label className='col-sm-2 col-form-label'>Tiêu đề</Form.Label>
             <div className='col-sm-10'>
               <Form.Control
                 type='text'
                 name='title'
-                ref={titleRef}
-                defaultValue={post.title}
+                value={post.title}
+                onChange={(e) => {
+                  setPost(...post, e.target.value)
+                }}
                 required
               />
             </div>
@@ -134,7 +191,12 @@ const ModalPost = ({ show, onShow, id }) => {
             <Form.Label className='col-sm-2 col-form-label'>Tác giả</Form.Label>
             <div className='col-sm-10'>
               <Form.Label className='visually-hidden'>Tác giả</Form.Label>
-              <Form.Select ref={authorRef} title='Tác giả' name='authorId'>
+              <Form.Select
+                ref={authorRef}
+                title='Tác giả'
+                name='authorId'
+                defaultValue={post?.author?.id}
+              >
                 <option value=''>-- Chọn tác giả --</option>
                 {authors.map((author) => (
                   <option key={author.id} value={author.id}>
@@ -169,7 +231,7 @@ const ModalPost = ({ show, onShow, id }) => {
                 type='text'
                 name='selectedTags'
                 ref={tagRef}
-                defaultValue=''
+                defaultValue={getTags()}
                 required
               />
             </div>
