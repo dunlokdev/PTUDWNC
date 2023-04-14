@@ -1,11 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import TagList from '../components/TagList'
-import styles from '../styles/PostItem.module.css'
-import { isEmptyOrSpaces } from '../utils/Utils'
+import TagList from './TagList'
+import styles from '../../styles/PostItem.module.css'
 
 const PostItem = ({ post }) => {
-  const { urlSlug, title, shortDescription, imageUrl, category, author, tags } = post
+  const { urlSlug, title, shortDescription, category, author, tags } = post
 
   // let img = isEmptyOrSpaces(post.imageUrl)
   //   ? process.env.PUBLIC_URL + '/images/tips.jpg'
@@ -31,7 +30,7 @@ const PostItem = ({ post }) => {
             {author.fullName}
           </Link>
         </p>
-        <p className={`card-text ${styles.clamp}`} >{shortDescription}</p>
+        <p className={`card-text ${styles.clamp}`}>{shortDescription}</p>
       </div>
     </div>
   )

@@ -25,7 +25,12 @@ namespace TatBlog.WebApi.Endpoints
 
             routeGroupBuilder.MapGet("/", GetAuthors)
                 .WithName("GetAuthors")
+                .Produces<ApiResponse<AuthorItem>>();
+
+            routeGroupBuilder.MapGet("/pagination", GetAuthorsPagination)
+                .WithName("GetAuthorsPagination")
                 .Produces<ApiResponse<PaginationResult<AuthorItem>>>();
+
 
             routeGroupBuilder.MapGet("/{id:int}", GetAuthorDetails)
                 .WithName("GetAuthorById")
@@ -66,11 +71,18 @@ namespace TatBlog.WebApi.Endpoints
                 .Produces(401)
                 .Produces<ApiResponse<string>>();
 
-
             return app;
         }
 
-        private static async Task<IResult> GetAuthors([AsParameters] AuthorFilterModel model, IAuthorRepository authorRepository)
+        private static async Task<IResult> GetAuthors(IAuthorRepository authorRepository)
+        {
+            var authors = await authorRepository.GetAuthorsAsync();
+
+            return Results.Ok(ApiResponse.Success(authors));
+        }
+
+
+        private static async Task<IResult> GetAuthorsPagination([AsParameters] AuthorFilterModel model, IAuthorRepository authorRepository)
         {
             var authorList = await authorRepository.GetPagedAuthorsAsync(model, model.Name);
 
@@ -87,6 +99,23 @@ namespace TatBlog.WebApi.Endpoints
             return author == null
                 ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy tác giả có mã số {id}"))
                 : Results.Ok(ApiResponse.Success(mapper.Map<AuthorItem>(author)));
+        }
+
+        private static async Task<IResult> GetPostsByAuthor(int id, [AsParameters] PagingModel pagingModel, IBlogRepository blogRepository)
+        {
+            var postQuery = new PostQuery()
+            {
+                AuthorId = id,
+                PublishedOnly = true,
+            };
+
+            var postsList = await blogRepository.GetPagedPostsByQueryAsync(
+                posts => posts.ProjectToType<PostDto>(),
+                postQuery,
+                pagingModel);
+
+            var paginationResult = new PaginationResult<PostDto>(postsList);
+            return Results.Ok(ApiResponse.Success(paginationResult));
         }
 
         private static async Task<IResult> GetPostsByAuthorId(int id, [AsParameters] PagingModel pagingModel, IBlogRepository blogRepository)
@@ -183,7 +212,7 @@ namespace TatBlog.WebApi.Endpoints
             return await authorRepository.AddOrUpdateAsync(author)
                 ? Results.Ok(ApiResponse.Success("Authors is updated", HttpStatusCode.NoContent))
                 : Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, "Could not find author"));
-                  
+
         }
 
         private static async Task<IResult> DeleteAuthor(int id, IAuthorRepository authorRepository)

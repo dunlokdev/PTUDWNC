@@ -25,7 +25,7 @@ namespace TatBlog.WebApi.Endpoints
 
             routeGroupBuilder.MapGet("/", GetCategories)
                 .WithName("GetCategories")
-                .Produces<ApiResponse<PaginationResult<CategoryItem>>>();
+                .Produces<ApiResponse<CategoryItem>>();
 
             routeGroupBuilder.MapGet("/{id:int}", GetCategoyDetails)
                 .WithName("GetCategoryById")
@@ -56,13 +56,11 @@ namespace TatBlog.WebApi.Endpoints
             return app;
         }
 
-        private static async Task<IResult> GetCategories([AsParameters] CategoryFilterModel model, ICategoryRepository categoryRepository)
+        private static async Task<IResult> GetCategories(ICategoryRepository categoryRepository)
         {
-            // model kế thừa từ PagingModel
-            var categories = await categoryRepository.GetPagedCategoriesAsync(model, model.Name);
+            var categories = await categoryRepository.GetCategoriesAsync();
 
-            var paginationResult = new PaginationResult<CategoryItem>(categories);
-            return Results.Ok(ApiResponse.Success(paginationResult));
+            return Results.Ok(ApiResponse.Success(categories));
         }
 
         private static async Task<IResult> GetCategoyDetails(int id, ICategoryRepository categoryRepository, IMapper mapper)
@@ -72,7 +70,6 @@ namespace TatBlog.WebApi.Endpoints
             return category == null
                 ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy tiêu đề có mã số {id}"))
                 : Results.Ok(ApiResponse.Success(mapper.Map<CategoryItem>(category)));
-
         }
 
         private static async Task<IResult> GetPostsByCategorySlug(

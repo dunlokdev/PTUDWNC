@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Card } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import blogApi from '../api/blogApi'
-import styles from '../styles/PostItem.module.css'
-import TagList from '../components/TagList'
+import TagList from '../components/blog/TagList'
 
 PostDetail.propTypes = {}
 
