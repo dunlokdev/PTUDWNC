@@ -9,3 +9,12 @@ export const useQuery = () => {
   const { search } = useLocation()
   return useMemo(() => new URLSearchParams(search), [search])
 }
+
+export function isInteger(str) {
+  return Number.isInteger(Number(str)) && Number(str) >= 0
+}
+
+export function decode(str) {
+  const txt = new DOMParser().parseFromString(str, 'text/html')
+  return txt.documentElement.textContent
+}

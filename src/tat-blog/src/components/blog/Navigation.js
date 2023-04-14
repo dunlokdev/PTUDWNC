@@ -10,10 +10,7 @@ function Navbar(props) {
       <div className='container-fluid'>
         <Nb.Brand href='/'>Tips & Tricks</Nb.Brand>
         <Nb.Toggle aria-controls='responsive-navbar-nav' />
-        <Nb.Collapse
-          id='responsive-navbar-nav'
-          className='d-sm-inline-flex justity-content-between'
-        >
+        <Nb.Collapse id='responsive-navbar-nav' className='d-sm-inline-flex justity-content-between'>
           <Nav className='mr-auto flex-grow-1'>
             <Nav.Item>
               <Link to='/' className='nav-link text-dark'>
@@ -22,9 +19,7 @@ function Navbar(props) {
             </Nav.Item>
 
             <Nav.Item>
-              <Link to='/blog/about' className='nav-link text-dark'>
-                Giới thiệu
-              </Link>
+              <Link to='/blog/about' className='nav-link text-dark'>Giới thiệu</Link>
             </Nav.Item>
 
             <Nav.Item>
