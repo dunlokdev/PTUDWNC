@@ -25,10 +25,6 @@ namespace TatBlog.WebApi.Validations
               .NotEmpty()
               .MaximumLength(1000);
 
-            RuleFor(x => x.UrlSlug)
-              .NotEmpty()
-              .MaximumLength(1000);
-
             RuleFor(x => x.CategoryId)
               .NotEmpty()
               .WithMessage("Bạn phải chọn chủ đề cho bài viết");

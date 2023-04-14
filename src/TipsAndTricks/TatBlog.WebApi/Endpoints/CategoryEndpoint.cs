@@ -70,7 +70,6 @@ namespace TatBlog.WebApi.Endpoints
             return category == null
                 ? Results.Ok(ApiResponse.Fail(HttpStatusCode.NotFound, $"Không tìm thấy tiêu đề có mã số {id}"))
                 : Results.Ok(ApiResponse.Success(mapper.Map<CategoryItem>(category)));
-
         }
 
         private static async Task<IResult> GetPostsByCategorySlug(

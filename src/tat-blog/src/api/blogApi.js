@@ -5,6 +5,14 @@ const blogApi = {
     const url = '/posts'
     return axiosClient.get(url, { params })
   },
+  getFilter() {
+    const url = '/posts/get-filter'
+    return axiosClient.get(url)
+  },
+  addOrUpdate(data) {
+    const url = `/posts`
+    return axiosClient.post(url, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+  },
   getById(id) {
     const url = `/posts/${id}`
     return axiosClient.get(url)

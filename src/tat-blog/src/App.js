@@ -10,6 +10,7 @@ import AdminLayout from './pages/admin/AdminLayout'
 import NotFound from './pages/NotFound'
 import Badrequest from './pages/Badrequest'
 import Posts from './pages/admin/post/Posts'
+import Edit from './pages/admin/post/Edit'
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
           </Route>
           <Route path='/admin' element={<AdminLayout />}>
             <Route index element={<Posts />} />
+            <Route path='posts' element={<Posts />} />
+            <Route path='posts/edit/:id' element={<Edit />} />
           </Route>
           <Route path='/400' element={<Badrequest />} />
           <Route path='*' element={<NotFound />} />

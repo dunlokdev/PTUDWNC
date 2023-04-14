@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
+import { Table } from 'react-bootstrap'
 import blogApi from '../../../api/blogApi'
 import Loading from '../../../components/Loading'
-import { Button, Modal, Table } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 import PostFilterPane from '../../../components/admin/PostFilterPane'
-import ModalPost from '../../../components/blog/ModalPost'
+import { Link, useLocation } from 'react-router-dom'
 
 const Posts = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [show, setShow] = useState(false)
-  const [id, setId] = useState()
+  const location = useLocation()
 
   const [filters, setFilters] = useState({
     Keyword: '',
@@ -38,10 +36,6 @@ const Posts = () => {
     setFilters(newFilters)
   }
 
-  const handleOnShow = (value) => {
-    setShow(value)
-  }
-
   return (
     <>
       <PostFilterPane postQuery={filters} onChange={handeFilterChange} />
@@ -63,23 +57,22 @@ const Posts = () => {
               posts.map((post) => (
                 <tr key={post.id}>
                   <td>
-                    <p
-                      onClick={() => {
-                        setId(post.id)
-                        setShow(true)
-                      }}
-                      className='text-bold fw-bold text-primary mb-0 poi'
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {post.title}
-                    </p>
+                    <p className='text-bold fw-bold text-primary mb-0 poi'>{post.title}</p>
                     <p className='text-muted'>{post.shortDescription}</p>
                   </td>
                   <td>{post.author.fullName}</td>
                   <td>{post.category.name}</td>
                   <td>{post.published ? 'Có' : 'Không'}</td>
                   <td>
-                    <button className='btn btn-danger btn-sm'>Xoá</button>
+                    <div className='d-flex gap-1'>
+                      <Link
+                        to={`${location.pathname}/posts/edit/${post.id}`}
+                        className='btn btn-warning btn-sm'
+                      >
+                        Sửa
+                      </Link>
+                      <button className='btn btn-danger btn-sm'>Xoá</button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -93,7 +86,6 @@ const Posts = () => {
           </tbody>
         </Table>
       )}
-      {show && <ModalPost show={show} onShow={handleOnShow} id={id} />}
     </>
   )
 }

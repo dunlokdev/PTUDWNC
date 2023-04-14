@@ -1,22 +1,78 @@
-﻿namespace TatBlog.WebApi.Models.Post
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace TatBlog.WebApi.Models.Post
 {
     public class PostEditModel
     {
+        public int Id { get; set; }
+
+        [DisplayName("Tiêu đề")]
+        [Required(ErrorMessage = "Tiêu đề không được để trống")]
+        [MaxLength(500, ErrorMessage = "Tiêu đề tối đa 500 ký tự")]
         public string Title { get; set; }
+
+        [DisplayName("Giới thiệu")]
+        [Required(ErrorMessage = "Giới thiệu không được để trống")]
         public string ShortDescription { get; set; }
+
+        [DisplayName("Mô tả")]
+        [Required(ErrorMessage = "Mô tả không được để trống")]
         public string Description { get; set; }
+
+        [DisplayName("Metadata")]
+        [Required(ErrorMessage = "Metadata không được để trống")]
         public string Meta { get; set; }
-        public string UrlSlug { get; set; }
+
+        [DisplayName("Chọn hình ảnh")]
+        public IFormFile ImageFile { get; set; }
+
+        [DisplayName("Hình ảnh hiện tại")]
+        public string ImageUrl { get; set; }
+
+        [DisplayName("Xuất bản ngay")]
         public bool Published { get; set; }
+
+        [DisplayName("Chủ đề")]
+        [Required]
         public int CategoryId { get; set; }
+
+        [DisplayName("Tác giả")]
+        [Required]
         public int AuthorId { get; set; }
+
+        [DisplayName("Từ khoá (mỗi từ 1 dòng)")]
+        [Required]
         public string SelectedTags { get; set; }
+
+        public IEnumerable<SelectListItem> AuthorList { get; set; }
+        public IEnumerable<SelectListItem> CategoryList { get; set; }
 
         public List<string> GetSelectedTags()
         {
             return (SelectedTags ?? "")
               .Split(new[] { ',', ';', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
               .ToList();
+        }
+
+        public static async ValueTask<PostEditModel> BindAsync(HttpContext context)
+        {
+            var form = await context.Request.ReadFormAsync();
+
+            return new PostEditModel()
+            {
+                ImageFile = form.Files["ImageFile"],
+                Id = int.Parse(form["Id"]),
+                Title = form["Title"],
+                ShortDescription = form["ShortDescription"],
+                Description = form["Description"],
+                Meta = form["Meta"],
+                Published = form["Published"] != "false",
+                CategoryId = int.Parse(form["CategoryId"]),
+                AuthorId = int.Parse(form["AuthorId"]),
+                SelectedTags = form["SelectedTags"]
+            };
         }
     }
 }
